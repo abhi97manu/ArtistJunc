@@ -7,14 +7,14 @@ import Dashboard from './Pages/Dashboard'
 const Layout = () => {
   return (
     < >
-      {/* <Navbar/>
+       {/* <Navbar/>
       <LandingPage/>
-      <Footer/> */}
+      <Footer/>  */}
 
 
      {/* Admin */}
 
-      <Dashboard></Dashboard>
+    <Dashboard></Dashboard>
     </>
   )
 }

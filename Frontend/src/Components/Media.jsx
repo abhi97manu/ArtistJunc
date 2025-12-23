@@ -1,9 +1,46 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { DataContext } from '../../DataContext'
-const Media = () => {
+const Media = ({currentPlaying}) => {
 
 
     const {isPlaying, setIsPlaying} = useContext(DataContext)
+    const [crnt_time, setCurr_Time] = useState();
+    const [audioDuration, setAudioDuration] = useState(0)
+    const audioRef = useRef(null)
+  
+useEffect(()=>{
+     if(!audioRef.current) return
+
+     const file = audioRef.current
+    file.src = currentPlaying;
+    file.load();
+   
+  file.addEventListener("loadedmetadata", ()=>{
+      console.log(file.duration)
+      setAudioDuration(file.duration)
+   
+  })
+  file.addEventListener("timeupdate",()=>{
+     setCurr_Time(audioRef.current.currentTime)
+  })
+
+  
+
+},[currentPlaying])
+
+useEffect(()=>{
+   if (!audioRef.current) return;
+
+  isPlaying
+    ? audioRef.current.play()
+    : audioRef.current.pause();
+   
+     console.log(crnt_time)
+},[currentPlaying,isPlaying])
+
+
+  
+ 
   return (
     <div className=' w-full grid grid-cols-6 items-center text-white h-24 bg-stone-950/70 rounded-2xl bottom-2 fixed z-10'>
        <div className=' col-span-1 text-center flex px-2 items-center gap-2'>
@@ -27,7 +64,7 @@ const Media = () => {
             {
                 !isPlaying ?
            <svg fill="#ffffffff" height="30px" width="30px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
-	            viewBox="0 0 492.308 492.308" xml:space="preserve" onClick={()=>setIsPlaying(prev=>!prev)} className='hover:cursor-pointer'>
+	            viewBox="0 0 492.308 492.308" xml:space="preserve" onClick={()=>setIsPlaying((prev)=> !prev)} className='hover:cursor-pointer'>
                 <g>
 	                <g>
 		                <path d="M139.346,118.995v254.313l261.74-127.154L139.346,118.995z M159.038,150.457l196.99,95.697l-196.99,95.692V150.457z"/>
@@ -44,7 +81,7 @@ const Media = () => {
             :
                 
             <svg fill="#ffffffff" height="30px" width="30px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
-	            viewBox="0 0 492.308 492.308" xml:space="preserve" onClick={()=>setIsPlaying(prev=>!prev)} className='hover:cursor-pointer'>
+	            viewBox="0 0 492.308 492.308" xml:space="preserve" onClick={()=>setIsPlaying((prev)=> !prev)} className='hover:cursor-pointer'>
                 <g>
 	                <g>
 		                <rect x="182.154" y="166.154" width="32" height="160" rx="8" ry="8" />
@@ -59,8 +96,6 @@ const Media = () => {
 	                </g>
                 </g>
             </svg>
-
-
 
             }
             
@@ -77,13 +112,16 @@ const Media = () => {
 
         </div>
         <div className=' w-[90%]  place-self-center'>
-                <input type="range" className='slider'></input>
+    
+                <input type="range" className='slider' min = "0" max = {Number(audioDuration)} value = {Number(crnt_time)}></input>
 
         </div>
        </div>
-
+       <audio src = "" ref = {audioRef} ></audio>
     </div>
   )
+
+  
 }
 
 export default Media

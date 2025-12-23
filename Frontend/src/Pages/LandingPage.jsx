@@ -28,7 +28,7 @@ const LandingPage = () => {
 
 
       </div>
-      <Media/>
+       {/* <Media currentPlaying={""}/> */}
     </div>
   )
 }

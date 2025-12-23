@@ -6,20 +6,22 @@ import Media from '../Components/Media'
 
 import ImageKit from 'imagekit-javascript'
 
+
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 const AdminSec = () => {
 
 
-const {addNew,isPlaying } = useContext(DataContext)
+const {addNew,isPlaying ,currentPlaying} = useContext(DataContext)
 const [allSongs, setAllSongs] = useState();
+const [allAlbums, setAllAlbums] = useState({})
 
 
 
 useEffect( ()=>{
     axios.get(`${serverUrl}/userSongs`)
     .then(response =>{
-        console.log(response.data);
+       // console.log(response.data);
         setAllSongs(response.data)
         
     })
@@ -27,9 +29,20 @@ useEffect( ()=>{
         console.log("error : " , error);
         
     })
+
+    axios.get(`${serverUrl}/albums`)
+    .then(response =>{
+
+        setAllAlbums(response.data)
+   
+    }).catch()
+    {
+        console.log(" in albums read");
+        
+    }
    
 },[])
-
+ 
   return (
     <>
     <div className=' h-full w-full  '>
@@ -40,7 +53,7 @@ useEffect( ()=>{
 
             </div>
 
-            <div className='w-full h-[100%] p-4  grid lg:grid-cols-3 gap-4 items-center grid-cols-1'>
+            <div className='w-full lg:w-[70rem] h-[100%] p-4 place-self-center grid  gap-4 items-center '>
 
             { (allSongs) && (
                 allSongs.map((ele,i) => (
@@ -56,24 +69,35 @@ useEffect( ()=>{
             </div>
               
         </div>
-         
 
-
-             
-
+         <div className=' w-full h-screen '>
+                 <div className='w-[100%]  h-16 flex items-center'>
+                    <h2 className='text-2xl w-full font-bold mx-4 border-b-2'>Albums</h2>
+                   
+                </div>
+                <div className='grid grid-cols-2 gap-2  lg:gap-6 w-full lg:w-[70rem] place-self-center lg:grid-cols-5 p-5'>
+                  {  
+                  
+                     Object.entries(allAlbums).map(([i,value]) =>{
+                        return(
+                          <AlbumCard key = {i} name = {i} list = {value}/>
+                        ) 
+                     })
+                    
+                }
+                
+                </div>
+         </div>
     </div>
+
+   
+
      {
                     addNew && (<SongForm/>)
      }   
 
-     { 
-     isPlaying &&
-        (
-                            
-        <Media/>
-                        
-           )
-      }
+     { <Media currentPlaying = {currentPlaying}/>
+       }
     </>
   )
 }
@@ -115,23 +139,14 @@ const BlankCard = () =>{
 
 
 const SongForm = () =>{
-   
 
-   
-   
-    
      const { setAddNew} = useContext(DataContext)
-    
      const [loading, setLoading] = useState(false);
-     const [songTitle, setSongTitle] = useState(" ");
-     const [songDesc, setSongDesc] = useState(" ");
-     const [songFeat, setSongFeat] = useState(" ");
-     const [songType, setSongType] = useState(" ");
-
+ 
      const [songDetail, setSongDetail] = useState(
         {
             Title : "",
-            Desc : "",
+            AlbumName : "",
             Feat: "",
             Type : "",
             ImgCover : "",
@@ -139,7 +154,6 @@ const SongForm = () =>{
 
         }
      )
-     
      
 
      function onSubmitHandler(e){
@@ -173,12 +187,7 @@ const SongForm = () =>{
 
                 setLoading(true)
                const res =  await axios.post(`${serverUrl}/upload_song`,formdata)
-             
-               
-               
-               console.log(res.data);
-               
-
+        
            }
            catch(error)
            {
@@ -193,10 +202,10 @@ const SongForm = () =>{
 
      
     return(
-        <div className='w-full h-full bg-stone-800/60 absolute border-4 text-center flex justify-center items-center'  >
-           { !loading ? ( <div className='w-[30%]  bg-white rounded-2xl' onClick={(e)=>e.stopPropagation()}>
+        <div className='w-full h-full bg-stone-800/60 absolute border-4 text-center flex justify-center '  >
+           { !loading ? ( <div className='w-72 h-fit mt-[50%] bg-white rounded-2xl' onClick={(e)=>e.stopPropagation()}>
                
-                <div className='absolute place-self-end translate-y-3 translate-x-3 hover:cursor-pointer '  onClick={()=>setAddNew((prev)=>!prev)}>
+                <div className='absolute place-self-end translate-y-8 -translate-x-2  hover:cursor-pointer '  onClick={()=>setAddNew((prev)=>!prev)}>
                 <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -221,10 +230,18 @@ const SongForm = () =>{
                 <h2>Add Your Music</h2>
                 <input type="text" placeholder='Song Title' className='border italic p-2' value = {songDetail.Title} onChange={(e)=>setSongDetail(prev =>({...prev,Title: e.target.value} ))}/>
                 <div className='flex text-center items-cetner gap-4' >
-                <label >Single <input type='radio' name="Cover" value = "Single" onChange={(e)=>setSongDetail(prev =>({...prev,Type: e.target.value} ))}/></label>
-                <label >Album <input type='radio' name="Cover" value = "Album" onChange={(e)=>setSongDetail(prev =>({...prev,Type: e.target.value} ))}/></label>
+                    <label >Single <input type='radio' name="Cover" value = "Single" onChange={(e)=>setSongDetail(prev =>({...prev,Type: e.target.value} ))}/></label>
+                    <label >Album <input type='radio' name="Cover" value = "Album" onChange={(e)=>setSongDetail(prev =>({...prev,Type: e.target.value} ))}/></label>
+                   
                 </div>
-                <input type="text" placeholder='Song Description' className='border italic p-2' value = {songDetail.Desc} onChange={(e)=>setSongDetail(prev =>({...prev,Desc: e.target.value} ))}/>
+                 {
+                        songDetail.Type == "Album" && (
+                           
+                            <input type="text" placeholder='Album Name' className='border italic p-2' value = {songDetail.AlbumName} onChange={(e)=>setSongDetail(prev =>({...prev,AlbumName: e.target.value} ))}/>
+                            
+                        )
+                    }
+               
                 <input type="text" placeholder='Any Feat.' className='border italic p-2' value = {songDetail.Feat} onChange={(e)=>setSongDetail(prev =>({...prev,Feat: e.target.value} ))}/>
                 <div className='outline-2 outline-dashed imageFile'>
                    <label className=' hover:cursor-pointer'>+ Add Music Cover<input type='file' accept='image/*' className='hidden'  onChange={HandleImageFile}></input></label> 
@@ -255,22 +272,37 @@ const SongForm = () =>{
 
 
 const NewSongCard = ({songData}) =>{
+ const {setIsPlaying, setCurrentPlaying} = useContext(DataContext)
 
-   const {setIsPlaying} = useContext(DataContext)
+
+
+    function setMediaPlay(audio){
+        setIsPlaying(true)
+        setCurrentPlaying(audio)
+        
+    }
+
+  
     return (
-       <div className='outline-1 outline-solid  flex box-border p-2'>
+       <div className='border-b-2 h-12 flex box-border px-2 '>
                    
                   
-               <img src ={songData.ImageFile} className=' w-32 h-32 '></img>
+               <img src ={songData.ImageFile} className='  w-12 '></img>
                <div className='grid grid-cols-3 items-center text-center justify-center px-2 w-full'>
-                   <div className='col-span-2 leading-4 items-center '>
-                       <h1 className='text-xl font-extrabold'>{songData.Title}</h1>
-                       <h1 className='text-lg font-medium underline'>{songData.Feat}</h1>
-                       <h1 className='text-sm font-light italic'>{songData.Type}</h1>
+                   <div className='col-span-2 leading-4 items-center px-6 '>
+                    <div className='flex gap-2 items-center'>
+                         <h1 className='text-md font-extrabold'>{songData.Title}</h1>
+                         <span className='h-1 w-1 rounded-full bg-black'></span>
+                       <h1 className='text-sm font-medium underline'>{songData.Feat}</h1>
+                    </div>
+                      
+                       <h1 className='text-sm font-light italic place-self-start'>{songData.Type}</h1>
                    </div>
-                   <div className='col-span-1 place-self-end '>
-                       <svg fill="#03643fff" height="50px" width="50px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
-                               viewBox="0 0 492.308 492.308" xml:space="preserve"  onClick={()=>setIsPlaying((prev)=> !prev)} className='hover:cursor-pointer'>
+                   <div className='col-span-1 place-self-end mb-2'>
+                    {
+                        
+                          <svg fill="#03643fff" height="30px" width="30px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+                               viewBox="0 0 492.308 492.308" xml:space="preserve"  onClick={()=>setMediaPlay(songData.AudioFile)} className='hover:cursor-pointer'>
                                <g>
                                    <g>
                                        <path d="M139.346,118.995v254.313l261.74-127.154L139.346,118.995z M159.038,150.457l196.99,95.697l-196.99,95.692V150.457z"/>
@@ -284,6 +316,12 @@ const NewSongCard = ({songData}) =>{
                                    </g>
                                </g>
                        </svg>
+                         
+
+                    
+
+                    }
+                      
                    </div>
                </div>
                         
@@ -291,5 +329,48 @@ const NewSongCard = ({songData}) =>{
               
     </div>
     )
+}
+
+const AlbumCard = ({name, list})=>{
+
+    const [showlist , setShowList] = useState(false)
+    const {setCurrentPlaying,setIsPlaying} = useContext(DataContext)
+     console.log(list);
+    return(
+        <div className='h-62 border rounded-2xl col-span-1 text-center grid justify-center bg-stone-200 ' onMouseEnter={()=>{setShowList(true)}} onMouseLeave={()=>{setShowList(false)}}>
+               { !showlist ? (
+                <>
+                <div className={ ` bg-black w-32 h-32 mt-3 rounded-full border flex justify-center items-center bg-cover bg-center transition-transform rotate-360 linear duration-2000 repeat` } style={{ backgroundImage: `url(${list[0].ImageFile})` }}>
+                        <div className='w-8 h-8 bg-red-800 rounded-full text-white bg-gradient-to-b  from-stone-950 from-10% via-stone-200 via-50% to-stone-950 to-90% font-black' >
+                            <svg viewBox="-30 -30 100 100" class="w-8 h-8 ">
+                        <circle cx="20" cy="20" r="15" fill="#e4dadaff" />
+</svg>
+
+                          </div>
+                </div> 
+                {/* <img src = {list[0].ImageFile} className=' w-38 h-38 object-fit rounded-full mt-4'></img> */}
+                <h2 className='font-bold text-xl'>{name}</h2>
+                <h4 className='font-thin text-sm italic'>Dotan</h4>
+                </>
+                 )
+                 :
+                 (
+                    <div className='place-self-center  '>
+                    {(list.map((i,e)=>{
+                         console.log(i);
+                        return(
+                            <h1 key = {e} className='text-black border-b-1 border-blue-400 hover:cursor-pointer hover:text-white' onClick = {()=>{setCurrentPlaying(i.AudioFile); setIsPlaying(true)}}>{i.Title}</h1>
+                        )
+                    }
+                    ))
+                    }
+            
+                    </div>
+                 
+                )
+                 }
+            </div>
+    )
+   
 }
 

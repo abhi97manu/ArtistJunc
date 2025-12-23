@@ -8,7 +8,7 @@ import DataProvider from '../DataProvider'
 
 const Dashboard = () => {
   return (
-    <div className=' w-full h-full  relative '>
+    <div className=' w-full h-full lg:h-screen  relative '>
         <AdminNav/>
         <div className='flex w-full h-full  '>
         <AdminSide/>

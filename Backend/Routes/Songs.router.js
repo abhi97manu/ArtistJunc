@@ -21,7 +21,7 @@ router.post('/upload_song',storage.fields([{name: "ImgCover"}, {name:"SongFile"}
 
     const songs = await songsModal.create({
         Title: req.body.Title,
-        Desc : req.body.Desc,
+        AlbumName : req.body.AlbumName,
         Type : req.body.Type,
         Feat : req.body.Feat,
         AudioFile : songFileData.url,
@@ -38,10 +38,26 @@ router.post('/upload_song',storage.fields([{name: "ImgCover"}, {name:"SongFile"}
 })
 
 
+router.get('/albums', async(req,res)=>{
+    const data = await songsModal.find({Type: "Album"})
+    const albumData = {}
+    for(ele of data)
+    {
+        albumData[ele.AlbumName]=data;
+ 
+    }
+    console.log(albumData);
+    
+     res.send(albumData)
+    
+    
+})
+
+
 router.get('/userSongs', async (req,res)=>{
     const data = await songsModal.find();
     res.json(data)
-    console.log(data);
+   
     
 })
 
