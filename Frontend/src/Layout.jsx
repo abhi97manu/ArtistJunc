@@ -1,20 +1,32 @@
 import React from 'react'
-import Navbar from './Components/Navbar'
-import Footer from './Components/Footer'
+
+
 import LandingPage from './Pages/LandingPage'
 import Dashboard from './Pages/Dashboard'
+import DataProvider from './DataProvider'
+import Register from './Pages/Register' 
+import Router from './Router'
+import { RouterProvider } from 'react-router-dom'
 
 const Layout = () => {
   return (
     < >
-       {/* <Navbar/>
-      <LandingPage/>
-      <Footer/>  */}
+     <DataProvider>
+      <RouterProvider router={Router}>
+       
+        <LandingPage/>
+     
 
 
      {/* Admin */}
 
-    <Dashboard></Dashboard>
+  
+             <Dashboard/>
+            <Register/>
+      </RouterProvider>
+    </DataProvider>
+
+
     </>
   )
 }

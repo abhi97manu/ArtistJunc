@@ -4,8 +4,12 @@ import './index.css'
 
 import Layout from './Layout.jsx'
 
+import Router from './Router.jsx'
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
+   
     <Layout />
+   
   </StrictMode>,
 )

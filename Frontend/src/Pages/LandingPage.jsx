@@ -1,35 +1,71 @@
-import React from 'react'
-import MusicCard from '../Components/MusicCard'
-import TourGuide from '../Components/TourGuide'
-import Albums from '../Components/Albums'
-import Media from '../Components/Media'
-
+import React, {  useEffect, useState } from 'react'
+import MusicCard from '../Components/General/MusicCard'
+import TourGuide from '../Components/General/TourGuide'
+import Albums from '../Components/General/Albums'
+import Media from '../Components/General/Media'
+import axios from 'axios'
+import Navbar from '../Components/General/Navbar'
+const serverUrl = import.meta.env.VITE_SERVER_URL
 const LandingPage = () => {
+
+  const [discogrph, setdescogrph] = useState()
+
+  useEffect(() => {
+    axios.get(`${serverUrl}/albums`)
+      .then(response => {
+
+        setdescogrph(response.data)
+
+        console.log("albums data", response.data);
+
+      }).catch((error) => {
+        console.log("error in albums read", error);
+
+      })
+  }, [])
   return (
-    <div className='bg-gray-900 w-full'>
-      <div className='firstPage'>
-        <img src = "dotanProfile.jpg" width={"100%"}/>
-        < MusicCard/>
+    <>
+    <Navbar/>
+    <div className='w-full h-fit'>
+      <div className=' relative h-58 lg:h-full'>
+        <img src="dotanProfile.jpg" width={"100%"} />
+        < MusicCard />
 
       </div>
-      <div className='secondPage relative'>
-        <img src = "dotan-concert.jpg" width={"100%"} />
-          <TourGuide/>
+      <div className=' relative'>
+        <img src="dotan-concert.jpg" width={"100%"} />
+        <TourGuide />
       </div>
-      <div className='relative flex justify-center' >
-           <img src = "bg-Mount.jpg"  className=' object-none blur-md'/>
-           <h2 className='absolute  text-5xl font-bold mt-30 text-transparent bg-linear-to-r from-stone-200 to-stone-800 bg-clip-text'>DISCOGRAPHY</h2>
-          <div className='absolute top-50 z-1 w-full  flex justify-center gap-7 p-4'>
+      <div className='relative h-full flex justify-center' >
+        <img src="bg-Mount.jpg" className='h-screen w-full lg:object-fit object-cover blur-sm' />
+        <h2 className='absolute  text-5xl font-bold mt-58 text-transparent bg-linear-to-r from-stone-200 to-stone-800 bg-clip-text'>DISCOGRAPHY</h2>
+        <div className='absolute top-[40%] z-1 w-full  flex justify-center gap-7 p-4'>
+
+          {
+            discogrph && Object.entries(discogrph).map(([i,album]) => {
+              
+             return(
              
-            <Albums source = {"./LLID.jpg"} title = {"A Little Light in the Dark"} year = {"2024"}/>
-            <Albums source = {"./Satll.jpg"} title = {"Satellites"} year = {"2021"}/>
-            <Albums source = {"./7lyrs.jpg"} title = {"7 Layers"} year = {"2014"}/>
-            </div>
+               <Albums key={i} albumData = {album}/>
+              
+
+            )
+            }
+
+
+
+            )
+          }
+
+        
+        </div>
 
 
       </div>
-       {/* <Media currentPlaying={""}/> */}
+      <Media currentPlaying={""} />
     </div>
+
+    </>
   )
 }
 

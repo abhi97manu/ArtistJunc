@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import { DataContext } from '../../DataContext'
+import { DataContext } from '../../../DataContext'
 const Media = ({currentPlaying}) => {
 
 
@@ -8,6 +8,8 @@ const Media = ({currentPlaying}) => {
     const [audioDuration, setAudioDuration] = useState(0)
     const audioRef = useRef(null)
   
+   
+    
 useEffect(()=>{
      if(!audioRef.current) return
 

@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react'
 import axios from 'axios'
 
-import { DataContext } from '../../DataContext'
-import Media from '../Components/Media'
+import { DataContext } from '../../../DataContext'
+import Media from '../General/Media'
 
 import ImageKit from 'imagekit-javascript'
 
@@ -45,7 +45,7 @@ useEffect( ()=>{
  
   return (
     <>
-    <div className=' h-full w-full  '>
+    <div className=' h-fit w-full  '>
         
         <div className=' w-full '>
             <div className='w-[100%]  h-16 flex items-center'>
@@ -70,7 +70,7 @@ useEffect( ()=>{
               
         </div>
 
-         <div className=' w-full h-screen '>
+         <div className=' w-full h-full '>
                  <div className='w-[100%]  h-16 flex items-center'>
                     <h2 className='text-2xl w-full font-bold mx-4 border-b-2'>Albums</h2>
                    
@@ -93,11 +93,12 @@ useEffect( ()=>{
    
 
      {
-                    addNew && (<SongForm/>)
-     }   
-
-     { <Media currentPlaying = {currentPlaying}/>
-       }
+       
+       addNew && (<SongForm/>)
+     
+     } 
+      <Media currentPlaying = {currentPlaying}/>
+    
     </>
   )
 }
@@ -107,7 +108,7 @@ export default AdminSec
 
 const BlankCard = () =>{
 
-   const {addNew, setAddNew} = useContext(DataContext)
+   const {setAddNew} = useContext(DataContext)
     return(
  <div className='outline-1 outline-dashed h-32 cols-span-1 flex gap-3 justify-center items-center'>
                    
@@ -186,7 +187,9 @@ const SongForm = () =>{
                 }
 
                 setLoading(true)
-               const res =  await axios.post(`${serverUrl}/upload_song`,formdata)
+               const res =  await axios.post(`${serverUrl}/upload_song`,formdata,{
+                withCredentials: true,
+               })
         
            }
            catch(error)
@@ -203,7 +206,7 @@ const SongForm = () =>{
      
     return(
         <div className='w-full h-full bg-stone-800/60 absolute border-4 text-center flex justify-center '  >
-           { !loading ? ( <div className='w-72 h-fit mt-[50%] bg-white rounded-2xl' onClick={(e)=>e.stopPropagation()}>
+            { !loading ? ( <div className='w-72 h-fit place-self-center bg-white rounded-2xl' onClick={(e)=>e.stopPropagation()}>
                
                 <div className='absolute place-self-end translate-y-8 -translate-x-2  hover:cursor-pointer '  onClick={()=>setAddNew((prev)=>!prev)}>
                 <svg
@@ -259,9 +262,15 @@ const SongForm = () =>{
             </div>
         ) 
         
-        :
+        : 
         
-        ( <div className='w-32 h-32 bg-red-400'>
+        ( <div className='w-32 h-32 place-self-center '>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+                        <rect fill="#ffffffff" stroke="#073a86ff" stroke-width="5" width="30" height="30" x="25" y="50"> <animate attributeName="y" calcMode="spline" dur="2" values="50;120;50;" keySplines=".5 0 .5 1;.5 0 .5 1" repeatCount="indefinite" begin="-.4"></animate></rect>
+                            <rect fill="#f7f2f4ff" stroke="#073a86ff" stroke-width="10" width="30" height="30" x="85" y="50"><animate attributeName="y" calcMode="spline" dur="2" values="50;120;50;" keySplines=".5 0 .5 1;.5 0 .5 1" repeatCount="indefinite" begin="-.2"></animate></rect>
+                            <rect fill="#ffffffff" stroke="#073a86ff" stroke-width="5" width="30" height="30" x="145" y="50">
+                            <animate attributeName="y" calcMode="spline" dur="2" values="50;120;50;" keySplines=".5 0 .5 1;.5 0 .5 1" repeatCount="indefinite" begin="0"></animate></rect>
+                    </svg>
             </div>)}   
 
            
@@ -337,7 +346,7 @@ const AlbumCard = ({name, list})=>{
     const {setCurrentPlaying,setIsPlaying} = useContext(DataContext)
      console.log(list);
     return(
-        <div className='h-62 border rounded-2xl col-span-1 text-center grid justify-center bg-stone-200 ' onMouseEnter={()=>{setShowList(true)}} onMouseLeave={()=>{setShowList(false)}}>
+        <div className='h-62 rounded-2xl col-span-1 text-center grid justify-center  ' onMouseEnter={()=>{setShowList(true)}} onMouseLeave={()=>{setShowList(false)}}>
                { !showlist ? (
                 <>
                 <div className={ ` bg-black w-32 h-32 mt-3 rounded-full border flex justify-center items-center bg-cover bg-center transition-transform rotate-360 linear duration-2000 repeat` } style={{ backgroundImage: `url(${list[0].ImageFile})` }}>
