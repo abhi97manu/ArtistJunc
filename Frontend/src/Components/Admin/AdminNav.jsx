@@ -10,7 +10,7 @@ const AdminNav = () => {
 
   async function Logout(){
     try{
-      const res = await axios.post(`${import.meta.env.VITE_SERVER_URL}/logout`, {},{
+      const res = await axios.post(`${import.meta.env.VITE_SERVER_URL}/admin/logout`, {},{
        
         withCredentials:true,
       })
@@ -27,8 +27,10 @@ const AdminNav = () => {
   }
 
   return (
-    <div className='relative w-full h-24 bg-blue-900 col-span-4 border text-center flex items-center justify-center text-white font-bold text-2xl'>
-        <h1 className='hover: cursor-pointer' onClick={()=>Logout()}>Logout</h1>
+    <div className='relative w-full h-24 bg-blue-900 col-span-4 border  flex gap-8 items-center justify-center text-white  '>
+        <h5>Home</h5>
+        <h1 className='text-6xl font-bold -translate-y-3'>Dotan</h1>
+        <h5 className='hover: cursor-pointer' onClick={()=>Logout()}>Logout</h5>
     </div>
   )
 }

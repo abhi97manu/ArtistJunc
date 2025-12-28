@@ -10,14 +10,14 @@ const Register = () => {
             const {
                 register,
                 handleSubmit,
-                watch,
+                
                 formState: { errors }
             } = useForm();
   
 
     async function onSubmit(data) {
         try{
-            const result = await axios.post(`${import.meta.env.VITE_SERVER_URL}/login`,{
+            const result = await axios.post(`${import.meta.env.VITE_SERVER_URL}/admin/login`,{
                       email:data.email,
                       password:data.password
                   },{
@@ -56,7 +56,7 @@ const Register = () => {
       <div>
         <label for="email" className="block text-sm/6 font-medium ">Email address</label>
         <div className="mt-2">
-          <input id="email" type="email" {...register("email",{required:"This is required"})} name="email"  placeholder='..@gmail' autocomplete="email" className="block w-full rounded-md bg-white/5  px-3 py-1.5 text-base line-1 outline-2 -outline-offset-1 outline-black/50 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6" />
+          <input id="email" type="email" {...register("email",{required:"This is required"})} name="email"  placeholder='@gmail' autocomplete="email" className="block w-full rounded-md bg-white/5  px-3 py-1.5 text-base line-1 outline-2 -outline-offset-1 outline-black/50 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6" />
         </div>
       </div>
 

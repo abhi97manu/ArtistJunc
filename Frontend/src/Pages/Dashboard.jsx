@@ -3,7 +3,7 @@ import AdminNav from '../Components/Admin/AdminNav'
 import AdminSide from '../Components/Admin/AdminSide'
 import AdminSec from '../Components/Admin/AdminSec'
 import axios from 'axios'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { Navigate, Outlet, RouterProvider, useNavigate } from 'react-router-dom'
 
 
 
@@ -15,7 +15,7 @@ const Dashboard = () => {
   useEffect(()=>{
     async function getUSer(){
       try{
-        const res = await axios.get(`${import.meta.env.VITE_SERVER_URL}/profile`,{
+        const res = await axios.get(`${import.meta.env.VITE_SERVER_URL}/admin/profile`,{
           withCredentials:true,
         })
          
@@ -38,12 +38,13 @@ const Dashboard = () => {
       (
      
      
-        <div className=' w-full h-full lg:h-screen  relative '>
-        <AdminNav/>
-        <div className='flex w-full h-full  '>
-        <AdminSide/>
+        <div className=' w-full min-h-full h-screen  relative '>
+            <AdminNav/>
+        <div className='flex w-full h-full relative '>
+         
+         <AdminSide/>
+          <Outlet/>
        
-        <AdminSec/>
         
         </div>
     </div>

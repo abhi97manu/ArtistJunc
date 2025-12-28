@@ -5,8 +5,8 @@ import LandingPage from './Pages/LandingPage'
 import Dashboard from './Pages/Dashboard'
 import DataProvider from './DataProvider'
 import Register from './Pages/Register' 
-import Router from './Router'
-import { RouterProvider } from 'react-router-dom'
+import Router from './Components/Routes/Router.jsx'
+import { Outlet, RouterProvider } from 'react-router-dom'
 
 const Layout = () => {
   return (
@@ -14,15 +14,15 @@ const Layout = () => {
      <DataProvider>
       <RouterProvider router={Router}>
        
-        <LandingPage/>
+        {/* <LandingPage/> */}
      
 
 
      {/* Admin */}
 
-  
-             <Dashboard/>
-            <Register/>
+      <Outlet/>
+             {/* <Dashboard/>
+            <Register/> */}
       </RouterProvider>
     </DataProvider>
 
