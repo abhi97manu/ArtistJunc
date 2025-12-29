@@ -1,7 +1,6 @@
 const express = require("express");
 const multer = require("multer");
-const uploadSongToI_KIT = require("../Services/Song.services");
-const uploadImageToI_KIT = require("../Services/Song.services");
+const { uploadImageToI_KIT, uploadSongToI_KIT } = require("../Services/Song.services");
 const router = express.Router();
 const songsModal = require("../Modal/Song_modal");
 const storage = multer({ storage: multer.memoryStorage() });
@@ -28,11 +27,13 @@ router.post(
   "/upload_song",
   storage.fields([{ name: "ImgCover" }, { name: "SongFile" }]),
   async (req, res) => {
-    console.log(req.files.SongFile);
-    console.log(req.body);
+  
+   
     const {token} = req.cookies
     const imageFileData = await uploadImageToI_KIT(req.files.ImgCover);
     const songFileData = await uploadSongToI_KIT(req.files.SongFile);
+
+     console.log(imageFileData, "::", songFileData);
 
     const songs = await songsModal.create({
       Title: req.body.Title,
@@ -43,7 +44,7 @@ router.post(
       ImageFile: imageFileData.url,
     });
 
-    console.log(songs._id);
+   
     const user = await userModal.findOneAndUpdate({_id: jwt.verify(token,process.env.JWT_SECRET_KEY).id},{
       $push: { songs: songs._id }
     })
@@ -67,7 +68,7 @@ router.get("/albums", async (req, res) => {
   for (ele of data) {
     albumData[ele.AlbumName] = data;
   }
-  console.log(albumData);
+ 
 
   res.send(albumData);
 });

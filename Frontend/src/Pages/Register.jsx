@@ -26,9 +26,8 @@ const Register = () => {
           
                 if(result.status === 200){
                 console.log("success",result);
-       
-        navigate('/Dashboard')
-      }
+                 navigate('/Dashboard')
+                 }
         }
         catch(err){
           console.log("error",err);

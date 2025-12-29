@@ -135,7 +135,10 @@ const SongForm = () => {
       const formdata = new FormData();
       for (const key in songDetail) {
         formdata.append(key, songDetail[key]);
+         console.log("song Upload date " ,songDetail[key]);
       }
+     
+      
 
       setLoading(true);
       const res = await axios.post(`${serverUrl}/upload_song`, formdata, {

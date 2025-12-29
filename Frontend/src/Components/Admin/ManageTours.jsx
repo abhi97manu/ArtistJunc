@@ -1,15 +1,51 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import axios from "axios";
+
+const ServerUrl = import.meta.env.VITE_SERVER_URL;
 
 const ManageTours = () => {
   const [showForm, setShowForm] = useState(false);
+  const [showTours, setShowTours] = useState()
+
+
+  useEffect(()=>{
+    axios.get(`${ServerUrl}/admin/tour/getTours`, {withCredentials:true})
+    .then(res => {console.log(res.data)
+      setShowTours(res.data)
+      
+    }
+  ).catch(err => console.log("error geeting tours", err))
+   
+  },[showForm])
 
   return (
     <>
       <div className="w-full h-fit p-8 ">
         <div className="relative w-full min-h-full bg-blue-200 p-3">
+           <div className="flex justify-between px-2 my-2 font-bold">
+                <h1>Tour</h1>
+                <h1>Tour Name</h1>
+                <h1>Tour Venue</h1>
+                <h1>Tour Date</h1>
+                <h1>Availability</h1>
+           </div>
+           <hr></hr>
+          { 
+           
+               showTours && (
+                showTours.map((element, key)=>(
+                  <>
+                    <TourDetails key= {key} tourData= {element}/>
+                    <hr></hr>
+                    </>
+                
+                )
+              )
+               )
+          }
           <button
-            className="outline outline-dashed rounded p-2"
+            className="outline outline-dashed rounded p-2 w-full mt-2  hover:cursor-pointer"
             onClick={() => setShowForm((prev) => !prev)}
           >
             + add a tour
@@ -29,10 +65,21 @@ const TourForm = ({ setShowForm }) => {
   } = useForm();
 
 
-  const onSubmit = (data) => {
-    
-    console.log(data);
+   const onSubmit = (data) => {
+    const formData = new FormData();
+    for(const key in data){
+        formData.append(key, data[key]);
+          console.log(data[key]);
+    }
+    formData.append('tourPoster', data['tourPoster'][0])
 
+   
+     axios.post(`${ServerUrl}/admin/tour/createTour`,formData,{withCredentials:true})
+    .then(res =>console.log(res)
+    )
+    .catch(err => console.log("error while uploading Tour" , err)
+    )
+    
     setShowForm((prev) => !prev);
   }
   
@@ -46,7 +93,7 @@ const TourForm = ({ setShowForm }) => {
             <br/> 
             <div className="flex w-full gap-4 justify-center items-center">
                 
-                <input type="date" className="border p-2 rounded mt-4 w-[10%] " {...register("tourDate",{required:true})}/>
+                <input type="date" className="border p-2 rounded mt-4 w-[10%] " {...register("tourDate")}/>
                 
                 <input type="text" placeholder="Tour Venue" className="border p-2 rounded mt-4 w-[70%] " {...register("tourVenue",{required:true})}/>
                
@@ -61,5 +108,21 @@ const TourForm = ({ setShowForm }) => {
     </div>
   );
 };
+
+
+
+const TourDetails= ({tourData})=> {
+  return (
+    <div className="flex justify-between px-2 my-2"> 
+    <h1>Tours</h1>
+        <h1>{tourData.tourName}</h1>
+        <h2>{tourData.tourVenue}</h2>
+        <h2>{tourData.tourDate}</h2>
+        <h1>{tourData.availability ? 'avialable' : 'booked'}</h1>
+        
+
+    </div>
+  )
+}
 
 export default ManageTours;
