@@ -7,7 +7,8 @@ const AdminSide = () => {
       <h1 className=''>Quick Lookout</h1>
       <div className=' p-2 grid gap-4'>
 
-        <h2 className='border-b-1'>Charts</h2>
+        <NavLink to = "/Dashboard" className='border-b-1' >Dashboard</NavLink>
+        <NavLink tp="" className='border-b-1'>Charts</NavLink>
         <NavLink to="manageTours" className='border-b-1'>Manage Tours</NavLink>
 
       </div>

@@ -63,14 +63,48 @@ router.post(
 );
 
 router.get("/albums", async (req, res) => {
-  const data = await songsModal.find({ Type: "Album" });
-  const albumData = {};
-  for (ele of data) {
-    albumData[ele.AlbumName] = data;
-  }
- 
 
-  res.send(albumData);
+    const {token} = req.cookies
+    if(!token)
+    {
+      res.json({message : "User not Auth!"})
+    }
+    const user = await userModal.findById({_id : jwt.verify(token, process.env.JWT_SECRET_KEY).id}).populate("songs")
+    if(!user)
+    {
+      res.json({message : "User not available!"})
+    }
+
+   
+    let Album = {}
+    for(const ele in user?.songs)
+    {
+        
+      if(user?.songs[ele]?.Type === 'Album'){
+
+         if(!Album[user.songs[ele].AlbumName])
+             Album[user.songs[ele].AlbumName] = []
+        Album[user.songs[ele].AlbumName].push(user.songs[ele])
+      }
+         
+    }
+   
+      
+    console.log(Album);
+    
+   res.send(Album)
+
+  // const data = await songsModal.find({ Type: "Album" });
+  // const albumData = {};
+  // for (const ele of data) {
+  //   if(!albumData[ele.AlbumName])
+  //     albumData[ele.AlbumName] = []
+  //   albumData[ele.AlbumName].push(data);
+  // }
+ 
+  // console.log(albumData);
+  
+  // res.send(albumData);
 });
 
 

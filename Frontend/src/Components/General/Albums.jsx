@@ -29,7 +29,7 @@ function AlbumSongs ({show, albumData}) {
     {show && <div className='w-full bg-stone-800/30 h-72 border text-center rounded-2xl text-stone-200 mt-10' > 
             <h1 className='mb-2'>Songs</h1>
             {
-              albumData.map((song, index) => (
+            albumData &&  albumData.map((song, index) => (
                 <div key={index}>
                   
                   <p className='hover:scale-110 hover:cursor-pointer'>{song.Title}</p>

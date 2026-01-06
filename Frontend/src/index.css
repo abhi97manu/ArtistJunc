@@ -35,8 +35,8 @@
 .slider::-webkit-slider-thumb {
   -webkit-appearance: none; /* Override default look */
   appearance: none;
-  width: 15px; /* Set a specific slider handle width */
-  height: 15px; /* Slider handle height */
+  width: 0.8rem; /* Set a specific slider handle width */
+  height: 0.8rem; /* Slider handle height */
   background: #e6f5f0; /* Green background */
   border-radius: 50%;
   cursor: pointer; /* Cursor on hover */
