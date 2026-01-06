@@ -4,6 +4,8 @@ import React, { useState } from 'react'
 
 const Albums = ({albumData}) => {
 
+  console.log(albumData , "albumData");
+  
   const [showCard, setShowCard] = useState(false);
   return (
     <div className='hover:scale-110' onMouseEnter={() => setShowCard(prev => !prev) } onMouseLeave={()=> setShowCard(prev=>!prev)}>

@@ -12,9 +12,10 @@ const AdminSec = () => {
   const { addNew } = useContext(DataContext);
 
   const [isPlaying, setIsPlaying] = useState(null);
- 
+
   const [allSongs, setAllSongs] = useState();
   const [allAlbums, setAllAlbums] = useState({});
+  const [addAlbum, setAddAlbum] = useState(false)
 
   useEffect(() => {
     axios
@@ -28,7 +29,7 @@ const AdminSec = () => {
       });
 
     axios
-      .get(`${serverUrl}/albums`, { withCredentials: true })
+      .get(`${serverUrl}/admin/albums`, { withCredentials: true })
       .then((response) => {
         console.log(response.data);
 
@@ -57,10 +58,9 @@ const AdminSec = () => {
                   key={i}
                   songData={ele}
                   isPlaying={isPlaying === i}
-                 
-                  onClick = {()=>{setIsPlaying(i)}}
-                 
-                  
+                  onClick={() => {
+                    setIsPlaying(i);
+                  }}
                 />
               ))}
 
@@ -80,11 +80,24 @@ const AdminSec = () => {
 
               return <AlbumCard key={key} name={key} list={value} />;
             })}
+            <div className="w-full h-full  bg-white  grid justify-center  text-center">
+              <div className="bg-black shadow-2xl w-32 h-32 mt-3 rounded-full border flex justify-center items-center bg-gradient-to-b  from-stone-950 from-10% via-stone-200 via-50% to-stone-950 to-90% ">
+                <div className="w-8 h-8 bg-red-800 rounded-full text-white bg-gradient-to-b box-content border-2 border-black  from-stone-950 from-10% via-stone-200 via-50% to-stone-950 to-90% ">
+                  <svg viewBox="-30 -30 100 100" class="w-8 h-8 ">
+                    <circle cx="20" cy="20" r="15" fill="#e4dadaff" />
+                  </svg>
+                </div>
+               
+              </div>
+               
+                 <button className="hover:cursor-pointer outline outline-dashed shadow-xl bg-indigo-600 rounded-xl text-white" onClick={()=>setAddAlbum(prev=> !prev)}>+ New Album</button>
+            </div>
           </div>
         </div>
       </div>
 
       {addNew && <SongForm />}
+      {addAlbum && <AlbumForm addAlbum = {addAlbum} setAddAlbum = {setAddAlbum}/>}
       {/* <Media currentPlaying={currentPlaying} /> */}
     </>
   );
@@ -353,12 +366,11 @@ const SongForm = () => {
 
 const NewSongCard = ({ songData, isPlaying, onClick }) => {
   const { setCurrentPlaying } = useContext(DataContext);
-  const [play , setPlay]  = useState(false)
-  
+  const [play, setPlay] = useState(false);
 
   function setMediaPlay(audio) {
     setCurrentPlaying(audio);
-    onClick()
+    onClick();
   }
 
   async function deleteMedia(audio) {
@@ -403,8 +415,8 @@ const NewSongCard = ({ songData, isPlaying, onClick }) => {
                 xml:space="preserve"
                 onClick={() => {
                   setMediaPlay(songData.AudioFile);
-                   onClick;
-                   setPlay(prev =>!prev)
+                  onClick;
+                  setPlay((prev) => !prev);
                 }}
                 className="hover:cursor-pointer"
               >
@@ -434,7 +446,10 @@ const NewSongCard = ({ songData, isPlaying, onClick }) => {
                 xmlns:xlink="http://www.w3.org/1999/xlink"
                 viewBox="0 0 492.308 492.308"
                 xml:space="preserve"
-                onClick={() =>{ onClick  ; setPlay(prev =>!prev)}}
+                onClick={() => {
+                  onClick;
+                  setPlay((prev) => !prev);
+                }}
                 className="hover:cursor-pointer"
               >
                 {/* Pause bars */}
@@ -487,7 +502,7 @@ const NewSongCard = ({ songData, isPlaying, onClick }) => {
           </div>
         </div>
       </div>
-      {isPlaying  && (
+      {isPlaying && (
         <div className="w-full justify-center items-center gap-2 px-2 flex h-3 bg-blue-200">
           <p className="text-[10px]">2:30</p>
           <input type="range" className="w-full slider"></input>
@@ -549,3 +564,105 @@ const AlbumCard = ({ name, list }) => {
     </div>
   );
 };
+
+const AlbumForm = ({addAlbum, setAddAlbum})=>{
+    return(
+      <div className="w-full h-full bg-stone-800/60 absolute border-4 text-center flex justify-center " onClick={()=>setAddAlbum(prev =>!prev)}>
+      { (
+        <div
+          className="w-72 h-fit place-self-center bg-white rounded-2xl"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div
+            className="absolute place-self-end translate-y-8 -translate-x-2  hover:cursor-pointer "
+            onClick={() => setAddAlbum((prev) => !prev)}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              width="24"
+              height="24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="12" r="10" />
+
+              <line x1="8" y1="8" x2="16" y2="16" />
+              <line x1="16" y1="8" x2="8" y2="16" />
+            </svg>
+          </div>
+          <form className="grid gap-3 p-4" >
+            <h2>Add Your Music</h2>
+            <input
+              type="text"
+              placeholder="Song Title"
+              className="border italic p-2"
+             
+             
+             
+            />
+            <div className="flex text-center items-cetner gap-4">
+              <label>
+                Single{" "}
+                <input
+                  type="radio"
+                  name="Cover"
+                  value="Single"
+                 
+                />
+              </label>
+              <label>
+                Album{" "}
+                <input
+                  type="radio"
+                  name="Cover"
+                  value="Album"
+                 
+                />
+              </label>
+            </div>
+          
+
+            <input
+              type="text"
+              placeholder="Any Feat."
+              className="border italic p-2"
+             
+            />
+            <div className="outline-2 outline-dashed imageFile">
+              <label className=" hover:cursor-pointer">
+                + Add Music Cover
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                 
+                ></input>
+              </label>
+            </div>
+
+            <div className="outline-2 outline-dashed audioFile">
+              <label className=" hover:cursor-pointer">
+                + Add Music File
+                <input
+                  type="file"
+                  accept="audio/*"
+                  className="hidden"
+                  
+                ></input>
+              </label>
+            </div>
+            <button className="bg-blue-400 rounded-md p-2 text-lg font-semibold cursor-pointer">
+              Lets Upload !
+            </button>
+          </form>
+        </div>
+      ) 
+       
+      }
+    </div>
+    )
+}

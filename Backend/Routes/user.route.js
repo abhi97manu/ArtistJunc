@@ -72,4 +72,37 @@ userRouter.get("/userSongs", async (req, res) => {
     .populate("songs");
   res.json(data.songs);
 });
+
+userRouter.get("/albums",async (req, res) => {
+
+    const {token} = req.cookies
+    if(!token)
+    {
+      res.json({message : "User not Auth!"})
+    }
+    const user = await userModal.findById({_id : jwt.verify(token, process.env.JWT_SECRET_KEY).id}).populate("songs")
+    if(!user)
+    {
+      res.json({message : "User not available!"})
+    }
+
+   
+    let Album = {}
+    for(const ele in user?.songs)
+    {
+        
+      if(user?.songs[ele]?.Type === 'Album'){
+
+         if(!Album[user.songs[ele].AlbumName])
+             Album[user.songs[ele].AlbumName] = []
+        Album[user.songs[ele].AlbumName].push(user.songs[ele])
+      }
+         
+    }
+   
+      
+    console.log(Album);
+    
+   res.send(Album)})
+  
 module.exports = userRouter;

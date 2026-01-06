@@ -23,7 +23,7 @@ const TourGuide = () => {
   }, []);
   return (
     <div className="absolute top-0 bg-zinc-800/70 p-2 w-full h-full justify-center flex text-center place-self-center text-white  ">
-      <table className="w-[60rem] h-[4rem] lg:h-[40rem]">
+      <table className="w-[60rem] ">
         <tr className="text-center border-b-2">
           <th className="p-2" colSpan={4}>
             Tour
@@ -36,8 +36,9 @@ const TourGuide = () => {
           tourDet.map((value, key) => {
             return (
               <tr key={key} className="text-center w-full  border-b-2 ">
+                <td> {value.tourName}</td>
                 <td>
-                  {" "}
+                 
                   {new Date(value.tourDate).toLocaleString("en-GB", {
                     day: "2-digit",
                     month: "long",
@@ -46,7 +47,6 @@ const TourGuide = () => {
                   //  minute: "2-digit",
                   })}
                 </td>
-                <td> {value.tourName}</td>
                 <td> {value.tourVenue}</td>
                 <td> {value.availability ? "Buy" : "Sold"}</td>
               </tr>
