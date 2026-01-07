@@ -11,10 +11,7 @@ const cors = require("cors");
 const { log } = require("three");
 
 
-router.use(cors({
-   origin: "http://localhost:5173",
-   credentials: true,
-}));
+
 router.use(cookieParser()); 
 
 router.get("/admin", (req, res) => {
@@ -30,7 +27,7 @@ router.post(
   
    
     const {token} = req.cookies
-    const imageFileData = await uploadImageToI_KIT(req.files.ImgCover);
+    const imageFileData = await uploadImageToI_KIT(req.files.ImgCover[0].buffer);
     const songFileData = await uploadSongToI_KIT(req.files.SongFile);
 
      console.log(imageFileData, "::", songFileData);
@@ -64,30 +61,13 @@ router.post(
 
 router.get("/albums", async (req, res) => {
 
-    const {token} = req.cookies
-    if(!token)
-    {
-      res.json({message : "User not Auth!"})
-    }
-    const user = await userModal.findById({_id : jwt.verify(token, process.env.JWT_SECRET_KEY).id}).populate("songs")
-    if(!user)
-    {
-      res.json({message : "User not available!"})
-    }
+   try{
+      
+   }
+   catch(err)
+   {
 
-   
-    let Album = {}
-    for(const ele in user?.songs)
-    {
-        
-      if(user?.songs[ele]?.Type === 'Album'){
-
-         if(!Album[user.songs[ele].AlbumName])
-             Album[user.songs[ele].AlbumName] = []
-        Album[user.songs[ele].AlbumName].push(user.songs[ele])
-      }
-         
-    }
+   }
    
       
     console.log(Album);

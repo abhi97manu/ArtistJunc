@@ -3,6 +3,13 @@ const userRouter = express.Router();
 const userModal = require("../Modal/user_modal");
 const jwt = require("jsonwebtoken");
 const songModal = require("../Modal/Song_modal");
+const albumModal = require("../Modal/Album_modal")
+const multer = require("multer");
+const { uploadImageToI_KIT } = require("../Services/Song.services");
+
+
+const upload = multer({ storage: multer.memoryStorage() }); 
+
 
 userRouter.post("/login", async (req, res) => {
   {
@@ -25,7 +32,7 @@ userRouter.post("/login", async (req, res) => {
 
 userRouter.get("/profile", async (req, res) => {
   const { token } = req.cookies;
-  console.log(token);
+ 
 
   if (!token) {
     return res.status(401).json({ message: "Unauthorized" });
@@ -101,8 +108,46 @@ userRouter.get("/albums",async (req, res) => {
     }
    
       
-    console.log(Album);
+  
     
    res.send(Album)})
+
+userRouter.post("/albums", upload.single("AlbumImg"),async(req,res)=>{
+      console.log(req.body);
+      console.log(req.file)
+    const token = req.cookies.token
+    if(!token)
+    {
+      res.json({message: "not Authorized"})
+    }
+
+    const decoded = jwt.verify(token,process.env.JWT_SECRET_KEY)
+
+    try{
+
+      const AlbumImage = await uploadImageToI_KIT(req.file.buffer)
+    console.log(req.body.AlbumSongs);
+    
+      const album = await albumModal.create({
+        artist_id : decoded.id,
+        albumName : req.body.Title,
+        Songs : req.body.AlbumSongs,
+        albumImg : AlbumImage.url
+      })
+
+      if(!album)
+      {
+        res.status(401).json({message:"something went wrong with Album DB" })
+          console.log("something went wrong with Album DB");
+          
+      }
+      res.status(200).json({mesage: "sucess"})
+    }
+    catch(err)
+    {
+        console.log("Err", err);
+        
+    }
+   })
   
 module.exports = userRouter;

@@ -33,7 +33,7 @@ function uploadSongToI_KIT(file){
                         return rej(error);
                     }
                     res(result);
-                     console.log("result from Song kit ", result);
+                    
                 }
                 )
         })
@@ -48,7 +48,7 @@ console.log("🔥 uploadImageToI_KIT CALLED")
 
           
                     iKit.upload({
-                        file : file[0].buffer,
+                        file : file,
                         fileName : new mongoose.Types.ObjectId().toString(),
                         folder : "/SongPic"
                     },
@@ -60,7 +60,7 @@ console.log("🔥 uploadImageToI_KIT CALLED")
                        return rej(error);
                     }
                     res(result);
-                    console.log("result from image kit ", result);
+                   
                 }
                 )
         })
