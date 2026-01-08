@@ -6,15 +6,13 @@ import Media from "../General/Media";
 
 import ImageKit from "imagekit-javascript";
 
-
-
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 const AdminSec = () => {
   const { addNew } = useContext(DataContext);
 
   const [isPlaying, setIsPlaying] = useState(null);
-
+  
   const [allSongs, setAllSongs] = useState();
   const [allAlbums, setAllAlbums] = useState({});
   const [addAlbum, setAddAlbum] = useState(false);
@@ -76,11 +74,13 @@ const AdminSec = () => {
               Albums
             </h2>
           </div>
-          <div className="grid grid-cols-3 gap-2  lg:gap-6 w-full lg:w-[70rem] place-self-center lg:grid-cols-5 p-5">
+          <div className="grid grid-cols-3 gap-2  h-72  overflow-y-auto scroll lg:gap-6 w-full lg:w-[70rem] place-self-center lg:grid-cols-5 p-5">
             {Object.entries(allAlbums).map(([key, value]) => {
               console.log("albums", value);
 
-              return <AlbumCard key={key} name={key} list={value} />;
+              return (
+                <AlbumCard key={key} name={key} data = {value}  />
+              );
             })}
             <div className="w-full h-full  bg-white  grid justify-center  text-center">
               <div className="bg-black shadow-2xl w-32 h-32 mt-3 rounded-full border flex justify-center items-center bg-gradient-to-b  from-stone-950 from-10% via-stone-200 via-50% to-stone-950 to-90% ">
@@ -104,6 +104,7 @@ const AdminSec = () => {
 
       {addNew && <SongForm />}
       {addAlbum && <AlbumForm songs={allSongs} setAddAlbum={setAddAlbum} />}
+     
       {/* <Media currentPlaying={currentPlaying} /> */}
     </>
   );
@@ -519,25 +520,16 @@ const NewSongCard = ({ songData, isPlaying, onClick }) => {
   );
 };
 
-const AlbumCard = ({ name, list }) => {
-  const [showlist, setShowList] = useState(false);
-  const { setCurrentPlaying, setIsPlaying } = useContext(DataContext);
-
+const AlbumCard = ({ name, data}) => {
+ // const { setCurrentPlaying, setIsPlaying } = useContext(DataContext);
+const [showAlbumlist, setShowAlbumList] = useState(false);
   return (
-    <div
-      className="h-62 rounded-2xl  col-span-1 text-center grid justify-center  "
-      onMouseEnter={() => {
-        setShowList(true);
-      }}
-      onMouseLeave={() => {
-        setShowList(false);
-      }}
-    >
-      {!showlist ? (
+    <div className="h-62 rounded-2xl  col-span-1 text-center grid justify-center ">
+      {
         <>
           <div
-            className={` bg-black w-32 h-32 mt-3 rounded-full border flex justify-center items-center bg-cover bg-center transition-transform rotate-360 linear duration-2000 repeat`}
-            style={{ backgroundImage: `url(${list[0].ImageFile})` }}
+            className={` bg-black w-32 h-32 mt-3 rounded-full border flex justify-center items-center bg-cover bg-center transition-transform  hover:rotate-360 ease-in-out  duration-2500 delay-150`}
+             style={{ backgroundImage: `url(${data.albumImg})` }}
           >
             <div className="w-8 h-8 bg-red-800 rounded-full text-white bg-gradient-to-b box-content border-3 border-black  from-stone-950 from-10% via-stone-200 via-50% to-stone-950 to-90% font-black">
               <svg viewBox="-30 -30 100 100" class="w-8 h-8 ">
@@ -546,27 +538,17 @@ const AlbumCard = ({ name, list }) => {
             </div>
           </div>
           {/* <img src = {list[0].ImageFile} className=' w-38 h-38 object-fit rounded-full mt-4'></img> */}
-          <h2 className="font-bold text-xl">{name}</h2>
+          <h2
+            className="font-bold hover:cursor-pointer hover:underline text-xl"
+            onClick={() => setShowAlbumList((prev) => !prev)}
+          >
+            {data.albumName}
+          </h2>
           <h4 className="font-thin text-sm italic">Dotan</h4>
         </>
-      ) : (
-        <div className="place-self-center  ">
-          {list.map((i, e) => {
-            return (
-              <h1
-                key={e}
-                className="text-black border-b-1 border-blue-400 hover:cursor-pointer hover:text-blue-500"
-                onClick={() => {
-                  setCurrentPlaying(i.AudioFile);
-                  setIsPlaying(true);
-                }}
-              >
-                {i.Title}
-              </h1>
-            );
-          })}
-        </div>
-      )}
+      }
+
+       {showAlbumlist && <AlbumSongsList songData = {data.songs} albumData = {data} toggleCard = {setShowAlbumList}/>}
     </div>
   );
 };
@@ -578,59 +560,43 @@ const AlbumForm = ({ songs, setAddAlbum }) => {
   const [coverImg, setCoverImg] = useState();
   const [albumDetails, setAlbumDetails] = useState({
     Title: "",
-    AlbumImg : null,
-    AlbumSongs : []
+    AlbumImg: null,
+    AlbumSongs: [],
   });
 
-  async function submitAlbum(e){
-      e.preventDefault()
-        const formData = new FormData();
+  async function submitAlbum(e) {
+    e.preventDefault();
+    const formData = new FormData();
 
-        for(const key in albumDetails)
-            {
-              
-              if(key === "AlbumSongs")
-              {
-                console.log("songs", albumDetails.AlbumSongs);
-                
-                  
-                   albumDetails.AlbumSongs.forEach(v=>{
-                formData.append("AlbumSongs",v)
-               })
-               continue;
-              }
-            formData.append(key , albumDetails[key])
-             
-            }
+    for (const key in albumDetails) {
+      if (key === "AlbumSongs") {
+        console.log("songs", albumDetails.AlbumSongs);
 
-            console.log(formData.getAll("AlbumSongs"))
+        albumDetails.AlbumSongs.forEach((v) => {
+          formData.append("AlbumSongs", v);
+        });
+        continue;
+      }
+      formData.append(key, albumDetails[key]);
+    }
 
-      
-  
-            setLoading(true);
-    try{
-       
-        const resp = await axios.post(`${serverUrl}/admin/albums`,
-          formData
-      ,{withCredentials:true})
+    console.log(formData.getAll("AlbumSongs"));
 
-      console.log(resp.data)
-       
+    setLoading(true);
+    try {
+      const resp = await axios.post(`${serverUrl}/admin/albums`, formData, {
+        withCredentials: true,
+      });
 
-    }catch(err)
-    {
+      console.log(resp.data);
+    } catch (err) {
       console.log("error uploaig album", err);
-      
-    }
-    finally
-    {
+    } finally {
       console.log("FINALLLYYY");
-      
-        setLoading(false);
-        setAddAlbum(false)
-       
+
+      setLoading(false);
+      setAddAlbum(false);
     }
-     
   }
 
   function addSongsToList(songId) {
@@ -639,7 +605,10 @@ const AlbumForm = ({ songs, setAddAlbum }) => {
     console.log("name", song);
 
     setAlbumSongs((a) => [...a, song.Title]);
-    setAlbumDetails(prev => ({...prev,AlbumSongs: [...prev.AlbumSongs,songId]}))
+    setAlbumDetails((prev) => ({
+      ...prev,
+      AlbumSongs: [...prev.AlbumSongs, songId],
+    }));
     setSelectedSong("");
   }
 
@@ -649,7 +618,7 @@ const AlbumForm = ({ songs, setAddAlbum }) => {
       className="w-full h-full bg-stone-800/60 absolute border-4 text-center flex justify-center "
       onClick={() => setAddAlbum((prev) => !prev)}
     >
-      { !loading ?
+      {!loading ? (
         <div
           className="w-72 h-fit place-self-center bg-white rounded-2xl"
           onClick={(e) => e.stopPropagation()}
@@ -675,13 +644,15 @@ const AlbumForm = ({ songs, setAddAlbum }) => {
               <line x1="16" y1="8" x2="8" y2="16" />
             </svg>
           </div>
-          <form className="grid gap-3 p-4" onSubmit={(e)=>submitAlbum(e)}>
+          <form className="grid gap-3 p-4" onSubmit={(e) => submitAlbum(e)}>
             <h2>Add Your Album</h2>
             <input
               type="text"
               placeholder="Album Title"
               value={albumDetails.Title}
-              onChange={(e)=>setAlbumDetails((prev)=> ({...prev,Title : e.target.value}))}
+              onChange={(e) =>
+                setAlbumDetails((prev) => ({ ...prev, Title: e.target.value }))
+              }
               className="border italic p-2"
             />
             <div className="outline-2 outline-dashed imageFile">
@@ -690,15 +661,22 @@ const AlbumForm = ({ songs, setAddAlbum }) => {
                 <input
                   type="file"
                   accept="image/*"
-                 
-                  onChange={(e) => {setCoverImg(e.target.files); setAlbumDetails((prev)=>({...prev, AlbumImg : e.target.files[0]}))}}
+                  onChange={(e) => {
+                    setCoverImg(e.target.files);
+                    setAlbumDetails((prev) => ({
+                      ...prev,
+                      AlbumImg: e.target.files[0],
+                    }));
+                  }}
                   className="hidden"
                 ></input>
               </label>
             </div>
-            {coverImg &&<div>
-              <img src={coverImg[0].name}></img>
-              </div>}
+            {coverImg && (
+              <div>
+                <img src={coverImg[0].name}></img>
+              </div>
+            )}
 
             <div className="flex text-center items-cetner gap-4"></div>
 
@@ -746,7 +724,8 @@ const AlbumForm = ({ songs, setAddAlbum }) => {
             </button>
           </form>
         </div>
-        :   <div className="w-32 h-32 place-self-center ">
+      ) : (
+        <div className="w-32 h-32 place-self-center ">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
             <rect
               fill="#ffffffff"
@@ -808,8 +787,36 @@ const AlbumForm = ({ songs, setAddAlbum }) => {
             </rect>
           </svg>
         </div>
-        
-      }
+      )}
+    </div>
+  );
+};
+
+const AlbumSongsList = ({songData, albumData, toggleCard}) => {
+  return (
+    <div className="w-full h-full bg-stone-800/60 absolute top-0 left-0 items-center text-center flex justify-center " onClick={()=>toggleCard(prev=>!prev)}>
+      <div className="">
+        <div
+          className="w-[28rem] h-fit place-self-center bg-white rounded-2xl"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="w-full h-32 text-start px-4 items-center flex">
+            <h1>{albumData.albumName}</h1>
+            <img ></img>
+          </div>
+
+          {songData.map((value,key)=>{
+            return(  <div className="border-t-2 mb-2 p-4 grid grid-cols-5" key = {key}>
+            <h1 className="col-span-3">{value.Title}</h1>           
+            <h1>Play</h1>           
+            <h1>Remove</h1>           
+          </div>
+            )
+          })
+        }
+          
+        </div>
+      </div>
     </div>
   );
 };

@@ -1,4 +1,5 @@
 const express = require("express");
+const mongoose = require("mongoose")
 const userRouter = express.Router();
 const userModal = require("../Modal/user_modal");
 const jwt = require("jsonwebtoken");
@@ -87,30 +88,43 @@ userRouter.get("/albums",async (req, res) => {
     {
       res.json({message : "User not Auth!"})
     }
-    const user = await userModal.findById({_id : jwt.verify(token, process.env.JWT_SECRET_KEY).id}).populate("songs")
-    if(!user)
-    {
-      res.json({message : "User not available!"})
-    }
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY)
+    console.log(typeof(decoded.id));
+    
+    const content =  await albumModal.aggregate([
+      {
+        $match : {artist_id :  new mongoose.Types.ObjectId(decoded.id) }
+      },
+      {
+        $lookup: {
+          from : "songs",
+          localField: "Songs",
+          foreignField: "_id",
+          as : "songs"
+        }
+      },
+      {
+        $project : {
+          albumName :1 ,
+          albumImg:1,
+          createdAt:1,
+          songs :{
+            Title: 1,
+            AudioFile:1
+          }
 
-   
-    let Album = {}
-    for(const ele in user?.songs)
-    {
-        
-      if(user?.songs[ele]?.Type === 'Album'){
-
-         if(!Album[user.songs[ele].AlbumName])
-             Album[user.songs[ele].AlbumName] = []
-        Album[user.songs[ele].AlbumName].push(user.songs[ele])
+        }
       }
-         
-    }
+    ])
+
+
+   console.log(content);
    
       
   
     
-   res.send(Album)})
+   res.status(200).send(content)
+  })
 
 userRouter.post("/albums", upload.single("AlbumImg"),async(req,res)=>{
       console.log(req.body);
