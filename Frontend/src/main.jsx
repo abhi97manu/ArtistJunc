@@ -1,15 +1,15 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import {Provider} from 'react-redux'
+import {store} from './Store/store.js'
+import "./index.css";
 
-import Layout from './Layout.jsx'
+import Layout from "./Layout.jsx";
 
-
-
-createRoot(document.getElementById('root')).render(
+createRoot(document.getElementById("root")).render(
   <StrictMode>
-   
-    <Layout />
-   
-  </StrictMode>,
-)
+    <Provider store = {store}>
+      <Layout />
+    </Provider>
+  </StrictMode>
+);

@@ -80,7 +80,7 @@ const TourForm = ({ setShowForm, showForm }) => {
   };
 
   return (
-    <div className="bg-stone-800/50 absolute w-full h-full top-0 left-0 flex justify-center items-center">
+    <div className="bg-stone-800/50 absolute w-full h-full top-0 left-0 flex justify-center items-center" onClick={()=>setShowForm(prev =>!prev)}>
       <div className="lg:w-[32rem] w-[24rem]  bg-white rounded-lg text-center  p-4 ">
         <h1 className="text-2xl font-bold">Add your Tour</h1>
         <form onSubmit={handleSubmit(onSubmit)}>

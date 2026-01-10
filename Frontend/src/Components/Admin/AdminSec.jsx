@@ -69,12 +69,12 @@ const AdminSec = () => {
         </div>
 
         <div className=" w-full h-full ">
-          <div className="w-[100%]  h-16 flex items-center">
+          <div className=" w-full h-16 flex items-center">
             <h2 className="text-2xl w-full font-bold mx-4 border-b-2">
               Albums
             </h2>
           </div>
-          <div className="grid grid-cols-3 gap-2  h-72  overflow-y-auto scroll lg:gap-6 w-full lg:w-[70rem] place-self-center lg:grid-cols-5 p-5">
+          <div className=" grid grid-cols-3 box-border md:grid-cols-4 p-4  gap-2 md:gap-2 h-72  overflow-y-auto  lg:gap-6 w-full lg:w-[70rem] place-self-center ">
             {Object.entries(allAlbums).map(([key, value]) => {
               console.log("albums", value);
 
