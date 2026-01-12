@@ -70,9 +70,9 @@ router.get("/albums", async (req, res) => {
    }
    
       
-    console.log(Album);
+  //   console.log(Album);
     
-   res.send(Album)
+  //  res.send(Album)
 
   // const data = await songsModal.find({ Type: "Album" });
   // const albumData = {};
@@ -86,6 +86,27 @@ router.get("/albums", async (req, res) => {
   
   // res.send(albumData);
 });
+
+router.get("/getAllSongs/:id", async(req,res)=>{
+  console.log(req.params.id);
+  
+      try{
+          const data = await songsModal.aggregate([{
+            $match : {
+              Type: req.params.id
+            }
+          }])
+
+          console.log(data);
+          res.status(200).json({message : "success", Songs: data})
+          
+      }catch(err)
+      {
+        console.log(err, "error getting list of all songs");
+        res.status(400).json({message : "Faulty"})
+        
+      }
+})
 
 
 

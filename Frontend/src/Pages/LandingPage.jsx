@@ -6,6 +6,7 @@ import Media from "../Components/General/Media";
 import axios from "axios";
 import Navbar from "../Components/General/Navbar";
 import { useDispatch, useSelector } from "react-redux";
+import useUsersAllSongs from '../ApiData'
 
 import {play,pause,setSong,togglePlay} from '../Store/Slice/SongSlice'
 import SongList from "../Components/General/SongList";
@@ -16,12 +17,15 @@ const LandingPage = () => {
 
   const isPlaying = useSelector((state)=> state.currentPlaying.isPlaying)
   const songId = useSelector((state)=>state.currentPlaying.songId)
+  
   const dispatch = useDispatch()
 
   console.log("redux ", isPlaying);
   
 
   const [discogrph, setdescogrph] = useState();
+  const {allSongs} = useUsersAllSongs();
+  console.log("array",allSongs);
 
   useEffect(() => {
     axios
@@ -34,6 +38,11 @@ const LandingPage = () => {
       .catch((error) => {
         console.log("error in albums read", error);
       });
+
+   
+    
+
+      
   }, []);
   return (
     <>
@@ -47,8 +56,13 @@ const LandingPage = () => {
         </div>
         <div className=" relative">
           <div className="w-full h-full p-4 bg-stone-800">
-            <SongList/>
-            <SongList/>
+            {
+              allSongs.map((v)=>{
+                 return  <SongList key = {v._id} value = {v} />
+              })
+            }
+           
+          
           </div>
           {/* <img src="dotan-concert.jpg" width={"100%"} />
           <TourGuide /> */}

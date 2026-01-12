@@ -8,12 +8,7 @@ const CurrentPlaySlice = createSlice({
         songId: 0
     },
     reducers:{
-        play(state){
-            state.isPlaying = true;
-        },
-        pause(state){
-            state.isPlaying = false;
-        },
+     
         togglePlay(state){
                 state.isPlaying = !state.isPlaying;
         },
