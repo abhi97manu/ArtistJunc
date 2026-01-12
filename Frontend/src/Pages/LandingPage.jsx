@@ -8,6 +8,7 @@ import Navbar from "../Components/General/Navbar";
 import { useDispatch, useSelector } from "react-redux";
 
 import {play,pause,setSong,togglePlay} from '../Store/Slice/SongSlice'
+import SongList from "../Components/General/SongList";
 
 
 const serverUrl = import.meta.env.VITE_SERVER_URL;
@@ -38,15 +39,19 @@ const LandingPage = () => {
     <>
       <Navbar />
       <div className="w-full h-fit">
-        <div className=" relative h-58 lg:h-full">
+        <div className=" relative  lg:h-full">
          
           <img src="dotanProfile.jpg" width={"100%"} />
           <MusicCard />
-          <button className="w-32 h-8 absolute top-40 left-0 bg-blue-400 " onClick={()=>dispatch(togglePlay())}>play</button>
+          
         </div>
         <div className=" relative">
-          <img src="dotan-concert.jpg" width={"100%"} />
-          <TourGuide />
+          <div className="w-full h-full p-4 bg-stone-800">
+            <SongList/>
+            <SongList/>
+          </div>
+          {/* <img src="dotan-concert.jpg" width={"100%"} />
+          <TourGuide /> */}
         </div>
         <div className="relative h-full flex justify-center">
           <img
@@ -63,7 +68,7 @@ const LandingPage = () => {
               })}
           </div>
         </div>
-        <Media currentPlaying={""} />
+        <Media />
       </div>
     </>
   );
