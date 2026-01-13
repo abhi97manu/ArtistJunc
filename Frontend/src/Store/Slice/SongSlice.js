@@ -1,23 +1,24 @@
-import {createSlice} from '@reduxjs/toolkit'
-
+import { createSlice } from "@reduxjs/toolkit";
 
 const CurrentPlaySlice = createSlice({
-    name : "currentPlaying",
-    initialState: {
-        isPlaying : false,
-        songId: 0
+  name: "currentPlaying",
+  initialState: {
+    isPlaying: false,
+    songId: 0,
+  },
+  reducers: {
+    togglePlay(state) {
+      state.isPlaying = !state.isPlaying;
     },
-    reducers:{
-     
-        togglePlay(state){
-                state.isPlaying = !state.isPlaying;
-        },
-        setSong(state,action){
-            state.songId = action.payload;
-        }
-    }
-})
+    setSong(state, action) {
+      state.songId = action.payload;
+    },
+    setIsPlaying: (state, action) => {
+      state.isPlaying = action.payload;
+    },
+  },
+});
 
-export const {play,pause,setSong, togglePlay} = CurrentPlaySlice.actions;
+export const { play, pause, setSong, togglePlay,setIsPlaying } = CurrentPlaySlice.actions;
 
 export default CurrentPlaySlice.reducer;

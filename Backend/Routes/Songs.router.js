@@ -9,6 +9,7 @@ const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const { log } = require("three");
+const { useSyncExternalStore } = require("react");
 
 
 
@@ -59,14 +60,24 @@ router.post(
   }
 );
 
-router.get("/albums", async (req, res) => {
+router.get("/getSong/:id", async (req, res) => {
 
    try{
+      const data = await songsModal.findOne({
+        _id: req.params.id 
+      })
+      if(!data)
+      {
+        console.log("uunable to fetch from DB")
+      }
+      console.log(data);
+      res.status(200).json({message: "success", data: data})
       
    }
    catch(err)
    {
-
+      console.log(err);
+      
    }
    
       
