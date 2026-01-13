@@ -58,7 +58,7 @@ const LandingPage = () => {
           <div className="w-full h-full p-4 bg-stone-800">
             {
               allSongs.map((v)=>{
-                 return  <SongList key = {v._id} value = {v}  UI_Play ={v._Id ===songId}/>
+                 return  <SongList key = {v._id} value = {v}  />
               })
             }
            

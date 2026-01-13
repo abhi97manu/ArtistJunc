@@ -1,11 +1,11 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, {  useEffect, useRef, useState } from "react";
 import { DataContext } from "../../../DataContext";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { togglePlay } from "../../Store/Slice/SongSlice";
 
 const Server_URL = import.meta.env.VITE_SERVER_URL;
-const Media = ({ currentPlaying }) => {
+const Media = () => {
   const [crnt_time, setCurr_Time] = useState();
   const [currentSong, setcurrentSong] = useState();
   const [audioDuration, setAudioDuration] = useState(0);
@@ -40,12 +40,10 @@ const Media = ({ currentPlaying }) => {
       dispatch(togglePlay());
     }
   }
+ 
 
   useEffect(() => {
-    getSong();
-  }, [songId]);
-
-  async function getSong() {
+     async function getSong() {
     try {
       const data = await axios.get(`${Server_URL}/getSong/${songId}`);
 
@@ -56,6 +54,9 @@ const Media = ({ currentPlaying }) => {
       console.log(err);
     }
   }
+    getSong();
+  }, [songId]);
+
 
   return (
     <div className=" w-full items-center text-white h-24 bg-stone-950/70 p-2 rounded-2xl flex flex-col bottom-2 fixed z-10">

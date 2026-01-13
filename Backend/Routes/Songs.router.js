@@ -60,7 +60,7 @@ router.post(
   }
 );
 
-router.get("/getSong/:id", async (req, res) => {
+router.get("/getSong/:id?", async (req, res) => {
 
    try{
       const data = await songsModal.findOne({
@@ -100,6 +100,8 @@ router.get("/getSong/:id", async (req, res) => {
 
 router.get("/getAllSongs/:id", async(req,res)=>{
   console.log(req.params.id);
+  console.log(req.query);
+  
   
       try{
           const data = await songsModal.aggregate([{
