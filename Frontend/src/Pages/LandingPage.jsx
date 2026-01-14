@@ -6,22 +6,22 @@ import Media from "../Components/General/Media";
 import axios from "axios";
 import Navbar from "../Components/General/Navbar";
 import { useDispatch, useSelector } from "react-redux";
-import useUsersAllSongs from "../ApiData";
+import {useUsersAllSongs} from "../ApiData";
 
-import { play, pause, setSong, togglePlay,setCurrentPage } from "../Store/Slice/SongSlice";
-import SongList from "../Components/General/SongList";
+//import { play, pause, setSong, togglePlay,setCurrentPage } from "../Store/Slice/SongSlice";
+//import SongList from "../Components/General/SongList";
 
 
 const Carosoul = lazy(()=>import("../Components/General/Carasoul"))
 
-const serverUrl = import.meta.env.VITE_SERVER_URL;
+//const serverUrl = import.meta.env.VITE_SERVER_URL;
 const LandingPage = () => {
-  const isPlaying = useSelector((state) => state.currentPlaying.isPlaying);
-  const songId = useSelector((state) => state.currentPlaying.songId);
+  //const isPlaying = useSelector((state) => state.currentPlaying.isPlaying);
+  //const songId = useSelector((state) => state.currentPlaying.songId);
   
 
 
-  const [discogrph, setdescogrph] = useState();
+  const [discogrph] = useState();
 
 
 
@@ -42,10 +42,10 @@ const LandingPage = () => {
       <Navbar />
       <div className="w-full h-fit">
         <div className=" relative  lg:h-full">
-          <img src="dotanProfile.jpg" width={"100%"} />
+          <img src="dotanProfile.jpg" className="blur-xs" width={"100%"} />
           <MusicCard />
         </div>
-        <div className=" relative">
+        <div className="  items-center flex relative">
         
         <Suspense fallback={<div>Loading.......</div>}>
           <Carosoul/>

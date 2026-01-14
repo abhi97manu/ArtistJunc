@@ -1,43 +1,48 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { togglePlay, setSong,setIsPlaying } from "../../Store/Slice/SongSlice";
+import{useGetSong} from '../../ApiData'
+
 
 const SongList = ({ value, }) => {
   const isPlaying = useSelector((state) => state.currentPlaying.isPlaying);
   const songId = useSelector((state) => state.currentPlaying.songId);
   const dispatch = useDispatch();
-
+const {getClickedSong} = useGetSong()
  
 
-  function playCheck() {
+
+  function playCheck(id) {
    // dispatch(setSong(value._id));
+     getClickedSong(id);
    if(value._id===songId)
     dispatch(togglePlay())
-
+   
+    
    else{
    dispatch(setSong(value._id))
    dispatch(setIsPlaying(true))
    }
   
-//   console.log("key, value", [value._id, songId]);
+  console.log("key, value",  songId);
 //  isPlaying? dispatch(setSong(value._id)) : dispatch(setSong(""))
     
   }
 
   return (
-    <div className="w-full h-14 bg-stone-950/70 mb-2 justify-between gap-4 text-white flex items-center p-2 rounded-xl">
+    <div className="w-full h-14 bg-stone-700/20 mb-2  justify-between gap-4 text-stone-700 flex items-center p-2 rounded-xl">
       <div className="h-full flex  gap-3 items-center ">
         { value._id===songId && isPlaying? (
           <img
             src="pauseButn.svg"
             className="h-full"
-            onClick={() => playCheck()}
+            onClick={() => playCheck(value._id)}
           ></img>
         ) : (
           <img
             src="playButn.svg"
             className="h-full"
-            onClick={() => playCheck()}
+            onClick={() => playCheck(value._id)}
           ></img>
         )}
         <h1>{value.Title}</h1>

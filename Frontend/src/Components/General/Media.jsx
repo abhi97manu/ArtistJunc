@@ -2,23 +2,26 @@ import React, {  useEffect, useRef, useState } from "react";
 import { DataContext } from "../../../DataContext";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-import { togglePlay } from "../../Store/Slice/SongSlice";
+import { setCurrentSong, togglePlay } from "../../Store/Slice/SongSlice";
+import{useGetSong} from '../../ApiData'
 
 const Server_URL = import.meta.env.VITE_SERVER_URL;
 const Media = () => {
   const [crnt_time, setCurr_Time] = useState();
-  const [currentSong, setcurrentSong] = useState();
+  
   const [audioDuration, setAudioDuration] = useState(0);
   const isPlaying = useSelector((state) => state.currentPlaying.isPlaying);
   const songId = useSelector((state) => state.currentPlaying.songId);
+  const currentSong = useSelector((state)=> state.currentPlaying.currentSong)
   const audioRef = useRef(null);
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (!audioRef.current) return;
-
+   
+    
     const file = audioRef.current;
-    file.src = currentSong;
+    file.src = currentSong.AudioFile;
     file.load();
 
     file.addEventListener("loadedmetadata", () => {
@@ -28,10 +31,15 @@ const Media = () => {
     file.addEventListener("timeupdate", () => {
       setCurr_Time(audioRef.current.currentTime);
     });
-  }, [currentSong]);
+ 
+  },[]);
+
+console.log("here current Song i nMEda", currentSong);
 
   function MediaControl() {
-     getSong();
+   
+     console.log("here");
+     
     if (!audioRef.current) return;
     if (isPlaying) {
       audioRef.current.pause();
@@ -44,17 +52,6 @@ const Media = () => {
  
 
   
-     async function getSong() {
-    try {
-      const data = await axios.get(`${Server_URL}/getSong/${songId}`);
-
-      const retreived_song_details = data.data.data;
-      setcurrentSong(retreived_song_details.AudioFile);
-      console.log("song : ", currentSong);
-    } catch (err) {
-      console.log(err);
-    }
-  }
    
 
 
@@ -64,11 +61,11 @@ const Media = () => {
       <div className="  text-center flex px-2 w-full items-center justify-between ">
         <div className="flex w-[50%] items-center gap-2">
           <img
-            src="7lyrs.jpg"
+            src={currentSong.ImageFile}
             alt="song_title"
             className="w-[3rem] rounded-2xl"
           ></img>
-          <p>Name of Song</p>
+          <p>{currentSong.Title}</p>
         </div>
 
         <div className="w-[50%] h-fit ">
@@ -203,7 +200,7 @@ const Media = () => {
           value={Number(crnt_time)}
         ></input>
       </div>
-      <audio src={currentSong} ref={audioRef} autoPlay></audio>
+      <audio src={currentSong.AudioFile} ref={audioRef} autoPlay></audio>
     </div>
   );
 };
