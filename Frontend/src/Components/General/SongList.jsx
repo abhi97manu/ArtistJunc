@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { togglePlay, setSong,setIsPlaying } from "../../Store/Slice/SongSlice";
 
-const SongList = ({ value, UI_Play }) => {
+const SongList = ({ value, }) => {
   const isPlaying = useSelector((state) => state.currentPlaying.isPlaying);
   const songId = useSelector((state) => state.currentPlaying.songId);
   const dispatch = useDispatch();

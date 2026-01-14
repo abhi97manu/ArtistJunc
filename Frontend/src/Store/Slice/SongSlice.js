@@ -5,6 +5,7 @@ const CurrentPlaySlice = createSlice({
   initialState: {
     isPlaying: false,
     songId: 0,
+    currentPage:0,
   },
   reducers: {
     togglePlay(state) {
@@ -16,9 +17,12 @@ const CurrentPlaySlice = createSlice({
     setIsPlaying: (state, action) => {
       state.isPlaying = action.payload;
     },
+    setCurrentPage: (state,action)=>{
+      state.currentPage = action.payload;
+    }
   },
 });
 
-export const { play, pause, setSong, togglePlay,setIsPlaying } = CurrentPlaySlice.actions;
+export const { play, pause, setSong, togglePlay,setIsPlaying,setCurrentPage } = CurrentPlaySlice.actions;
 
 export default CurrentPlaySlice.reducer;

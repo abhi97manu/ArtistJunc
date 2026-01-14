@@ -7,9 +7,9 @@ const storage = multer({ storage: multer.memoryStorage() });
 const userModal = require("../Modal/user_modal");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
-const cors = require("cors");
-const { log } = require("three");
-const { useSyncExternalStore } = require("react");
+const {ObjectId} = require('mongoose')
+
+
 
 
 
@@ -60,17 +60,18 @@ router.post(
   }
 );
 
-router.get("/getSong/:id?", async (req, res) => {
-
+router.get("/getSong/:id", async (req, res) => {
+    console.log("issue here ?? ",req.params.id);
+  
    try{
-      const data = await songsModal.findOne({
-        _id: req.params.id 
-      })
+      const data = await songsModal.findById(
+        req.params.id
+      )
       if(!data)
       {
         console.log("uunable to fetch from DB")
       }
-      console.log(data);
+     // console.log(data);
       res.status(200).json({message: "success", data: data})
       
    }
@@ -100,18 +101,26 @@ router.get("/getSong/:id?", async (req, res) => {
 
 router.get("/getAllSongs/:id", async(req,res)=>{
   console.log(req.params.id);
-  console.log(req.query);
-  
+  const {limit,page} = req.query
+  const skip = (page)*limit
+  console.log(skip);
   
       try{
+        const totalRec = await songsModal.countDocuments();
           const data = await songsModal.aggregate([{
             $match : {
               Type: req.params.id
             }
-          }])
+          },
+          {
+            $skip: skip
+          },
+          {
+              $limit: Number(limit)
+            }])
 
-          console.log(data);
-          res.status(200).json({message : "success", Songs: data})
+      //    console.log(data);
+          res.status(200).json({message : "success", Songs: data, count : totalRec})
           
       }catch(err)
       {

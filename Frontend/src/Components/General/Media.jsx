@@ -31,6 +31,7 @@ const Media = () => {
   }, [currentSong]);
 
   function MediaControl() {
+     getSong();
     if (!audioRef.current) return;
     if (isPlaying) {
       audioRef.current.pause();
@@ -42,7 +43,7 @@ const Media = () => {
   }
  
 
-  useEffect(() => {
+  
      async function getSong() {
     try {
       const data = await axios.get(`${Server_URL}/getSong/${songId}`);
@@ -54,8 +55,8 @@ const Media = () => {
       console.log(err);
     }
   }
-    getSong();
-  }, [songId]);
+   
+
 
 
   return (

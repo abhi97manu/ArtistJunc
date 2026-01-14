@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { lazy, Suspense, useEffect, useState } from "react";
 import MusicCard from "../Components/General/MusicCard";
 import TourGuide from "../Components/General/TourGuide";
 import Albums from "../Components/General/Albums";
@@ -6,64 +6,51 @@ import Media from "../Components/General/Media";
 import axios from "axios";
 import Navbar from "../Components/General/Navbar";
 import { useDispatch, useSelector } from "react-redux";
-import useUsersAllSongs from '../ApiData'
+import useUsersAllSongs from "../ApiData";
 
-import {play,pause,setSong,togglePlay} from '../Store/Slice/SongSlice'
+import { play, pause, setSong, togglePlay,setCurrentPage } from "../Store/Slice/SongSlice";
 import SongList from "../Components/General/SongList";
 
 
+const Carosoul = lazy(()=>import("../Components/General/Carasoul"))
+
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 const LandingPage = () => {
-
-  const isPlaying = useSelector((state)=> state.currentPlaying.isPlaying)
-  const songId = useSelector((state)=>state.currentPlaying.songId)
+  const isPlaying = useSelector((state) => state.currentPlaying.isPlaying);
+  const songId = useSelector((state) => state.currentPlaying.songId);
   
-  const dispatch = useDispatch()
 
-  console.log("redux ", isPlaying);
-  
 
   const [discogrph, setdescogrph] = useState();
-  const {allSongs} = useUsersAllSongs();
-  console.log("array",allSongs);
+
+
 
   useEffect(() => {
-    axios
-      .get(`${serverUrl}/albums`)
-      .then((response) => {
-        setdescogrph(response.data);
+    // axios
+    //   .get(`${serverUrl}/albums`)
+    //   .then((response) => {
+    //     setdescogrph(response.data);
 
-        console.log("albums data", response.data);
-      })
-      .catch((error) => {
-        console.log("error in albums read", error);
-      });
-
-   
-    
-
-      
+    //     console.log("albums data", response.data);
+    //   })
+    //   .catch((error) => {
+    //     console.log("error in albums read", error);
+    //   });
   }, []);
   return (
     <>
       <Navbar />
       <div className="w-full h-fit">
         <div className=" relative  lg:h-full">
-         
           <img src="dotanProfile.jpg" width={"100%"} />
           <MusicCard />
-          
         </div>
         <div className=" relative">
-          <div className="w-full h-full p-4 bg-stone-800">
-            {
-              allSongs.map((v)=>{
-                 return  <SongList key = {v._id} value = {v}  />
-              })
-            }
-           
-          
-          </div>
+        
+        <Suspense fallback={<div>Loading.......</div>}>
+          <Carosoul/>
+        </Suspense>
+
           {/* <img src="dotan-concert.jpg" width={"100%"} />
           <TourGuide /> */}
         </div>
