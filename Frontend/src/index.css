@@ -9,6 +9,12 @@
     font-weight: 900;
     line-height: 1;
 }
+.mobile_Title{
+  font-family: "Wix Madefor Display", sans-serif; 
+    font-size: x-large;
+    font-weight: 600;
+    line-height: 1;
+}
 
 .LogoFont{
     font-family: "Pacifico", cursive;
