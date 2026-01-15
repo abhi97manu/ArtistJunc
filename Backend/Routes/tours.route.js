@@ -16,7 +16,7 @@ tourRouter.post('/createTour',storage.single('tourPoster') , async(req,res)=>{
     const { tourName, tourDate, tourVenue} = req.body;
    const tourPoster = req.file;
   
-    console.log("tourPoster", req.file);
+    console.log("tourPoster", req.body);
     const artist_id = jwt.verify(token, process.env.JWT_SECRET_KEY).id ?? null;
     const posterUrl = await uploadCoverToI_KIT(tourPoster);
 
@@ -25,7 +25,7 @@ tourRouter.post('/createTour',storage.single('tourPoster') , async(req,res)=>{
     const newTour = await tourModal.create({
        
         tourName: tourName,
-        tourDate: new Date(2023, 0, 22),
+        tourDate: tourDate,
         tourVenue: tourVenue,
         tourPoster: posterUrl.url
     });

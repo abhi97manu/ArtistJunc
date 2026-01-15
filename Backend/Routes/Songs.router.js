@@ -132,4 +132,18 @@ router.get("/getAllSongs/:id", async (req, res) => {
   }
 });
 
+router.get("/getRecentSong",async (req,res)=>{
+ 
+  try{
+      const data = await songsModal.findOne().sort({createdAt:-1})
+       console.log(data);
+       if(data)
+        res.status(200).json(data)
+  }
+  catch(err){
+      console.log(err);
+      
+  }
+})
+
 module.exports = router;

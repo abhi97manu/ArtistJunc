@@ -76,7 +76,7 @@ const AdminSec = () => {
           </div>
           <div className=" grid grid-cols-3 box-border md:grid-cols-4 p-4  gap-2 md:gap-2 h-72  overflow-y-auto  lg:gap-6 w-full lg:w-[70rem] place-self-center ">
             {Object.entries(allAlbums).map(([key, value]) => {
-              console.log("albums", value);
+            //  console.log("albums", value);
 
               return (
                 <AlbumCard key={key} name={key} data = {value}  />

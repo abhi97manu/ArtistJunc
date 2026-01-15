@@ -26,7 +26,7 @@ const Media = () => {
     file.load();
 
     file.addEventListener("loadedmetadata", () => {
-      console.log(file.duration);
+     // console.log(file.duration);
       setAudioDuration(file.duration);
     });
     file.addEventListener("timeupdate", () => {

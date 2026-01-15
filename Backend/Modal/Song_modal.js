@@ -8,7 +8,7 @@ const songSchema = new mongoose.Schema({
     AlbumName: String,
     AudioFile : String,
     ImageFile : String
-})
+},{timestamps:true})
 
 const songModal = mongoose.model("songs",songSchema)
 module.exports = songModal;

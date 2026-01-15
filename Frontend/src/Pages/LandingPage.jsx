@@ -6,7 +6,7 @@ import Media from "../Components/General/Media";
 import axios from "axios";
 import Navbar from "../Components/General/Navbar";
 import { useDispatch, useSelector } from "react-redux";
-import {useUsersAllSongs} from "../ApiData";
+import {getAlbums} from "../ApiData";
 
 //import { play, pause, setSong, togglePlay,setCurrentPage } from "../Store/Slice/SongSlice";
 //import SongList from "../Components/General/SongList";
@@ -21,21 +21,18 @@ const LandingPage = () => {
   
 
 
-  const [discogrph] = useState();
+  const [discogrph,setDiscograph] = useState();
 
 
 
   useEffect(() => {
-    // axios
-    //   .get(`${serverUrl}/albums`)
-    //   .then((response) => {
-    //     setdescogrph(response.data);
-
-    //     console.log("albums data", response.data);
-    //   })
-    //   .catch((error) => {
-    //     console.log("error in albums read", error);
-    //   });
+    async function getAlbumDetails(){
+         const data =await getAlbums()
+      console.log(data);
+      setDiscograph(data)
+      
+    } 
+     getAlbumDetails()
   }, []);
   return (
     <>

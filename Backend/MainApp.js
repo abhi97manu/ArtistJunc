@@ -16,6 +16,7 @@ app.use(cors({
 }));
 app.use(express.json())
 app.use('/',router)
+app.use('/albums',albumRouter)
 app.use('/admin',userRouter)
 app.use('/admin/tour',tourRouter)
 app.use('/admin/album',albumRouter)

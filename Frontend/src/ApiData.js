@@ -55,3 +55,38 @@ export  function useGetSong() {
   }
  return{getClickedSong}
   }
+
+
+
+
+
+  export async function getLatestSong(){
+    try{
+
+      const response = await axios.get(`${Server_URL}/getRecentSong`)
+      if(!response)
+        console.log("no data");
+      return response.data
+        
+    }
+  catch(err)
+  {
+    console.log(err);
+    
+  }
+   
+
+  }
+
+
+  export async function getAlbums(){
+    try{
+        const response = await axios.get(`${Server_URL}/albums/allAlbums`)
+            console.log(response);
+            return response.data
+    }
+    catch(err){
+        console.log(err);
+        
+    }
+  }

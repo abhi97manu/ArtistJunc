@@ -49,7 +49,7 @@ const Carasoul = () => {
               ))}
             </div>
             
-              <button onClick={() => prev()} className='absolute left-1 hover:scale-125 text-stone-800 hover:text-black' >
+              <button onClick={() => prev()} className='absolute left-1 hover:scale-125 text-stone-300 hover:text-stone-700' >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
@@ -61,7 +61,7 @@ const Carasoul = () => {
                 </svg>
               </button>
 
-              <button onClick={() => next()}  className='absolute right-1 hover:scale-125 text-stone-800 hover:text-black'>
+              <button onClick={() => next()}  className='absolute right-1 hover:scale-125 text-stone-300 hover:text-stone-700'>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
