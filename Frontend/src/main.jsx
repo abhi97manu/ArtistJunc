@@ -7,9 +7,9 @@ import "./index.css";
 import Layout from "./Layout.jsx";
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
+
     <Provider store = {store}>
       <Layout />
     </Provider>
-  </StrictMode>
+ 
 );

@@ -1,5 +1,5 @@
-import React, {  useEffect, useRef, useState } from "react";
-import { DataContext } from "../../../DataContext";
+import React, {  useCallback, useEffect, useMemo, useRef, useState } from "react";
+
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { setCurrentSong, togglePlay } from "../../Store/Slice/SongSlice";
@@ -19,6 +19,7 @@ const Media = () => {
   useEffect(() => {
     if (!audioRef.current) return;
    
+    console.log("AudioRef");
     
     const file = audioRef.current;
     file.src = currentSong.AudioFile;
@@ -34,21 +35,27 @@ const Media = () => {
  
   },[]);
 
-console.log("here current Song i nMEda", currentSong);
+//console.log("here current Song i nMEda", currentSong);
 
-  function MediaControl() {
+  function PlayPause() {
    
-     console.log("here");
+      dispatch(togglePlay())
      
-    if (!audioRef.current) return;
-    if (isPlaying) {
-      audioRef.current.pause();
-      dispatch(togglePlay());
-    } else {
-      audioRef.current.play();
-      dispatch(togglePlay());
-    }
+   
   }
+
+  useEffect(()=>{
+ 
+ if (!audioRef.current) return;
+    if (isPlaying) {
+      audioRef.current.play();
+      console.log("True playing", isPlaying);
+    } else {
+      audioRef.current.pause();
+     console.log("false Playing", isPlaying);
+    }
+    
+  },[isPlaying])
  
 
   
@@ -102,7 +109,7 @@ console.log("here current Song i nMEda", currentSong);
                 xmlns:xlink="http://www.w3.org/1999/xlink"
                 viewBox="0 0 492.308 492.308"
                 xml:space="preserve"
-                onClick={() => MediaControl()}
+                onClick={() => PlayPause()}
                 className="hover:cursor-pointer"
               >
                 <g>
@@ -131,7 +138,7 @@ console.log("here current Song i nMEda", currentSong);
                 xmlns:xlink="http://www.w3.org/1999/xlink"
                 viewBox="0 0 492.308 492.308"
                 xml:space="preserve"
-                onClick={() => MediaControl()}
+                onClick={() => PlayPause()}
                 className="hover:cursor-pointer"
               >
                 <g>

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 
-import { DataContext } from "../../../DataContext";
+
 import Media from "../General/Media";
 
 import ImageKit from "imagekit-javascript";
@@ -9,8 +9,8 @@ import ImageKit from "imagekit-javascript";
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 const AdminSec = () => {
-  const { addNew } = useContext(DataContext);
-
+  
+   const [addNew, setAddNew] = useState()
   const [isPlaying, setIsPlaying] = useState(null);
   
   const [allSongs, setAllSongs] = useState();
@@ -64,7 +64,7 @@ const AdminSec = () => {
                 />
               ))}
 
-            <BlankCard />
+            <BlankCard setAddNew = {setAddNew}/>
           </div>
         </div>
 
@@ -102,7 +102,7 @@ const AdminSec = () => {
         </div>
       </div>
 
-      {addNew && <SongForm />}
+      {addNew && <SongForm  setAddNew= {setAddNew}/>}
       {addAlbum && <AlbumForm songs={allSongs} setAddAlbum={setAddAlbum} />}
      
       {/* <Media currentPlaying={currentPlaying} /> */}
@@ -112,8 +112,8 @@ const AdminSec = () => {
 
 export default AdminSec;
 
-const BlankCard = () => {
-  const { setAddNew } = useContext(DataContext);
+const BlankCard = ({setAddNew}) => {
+
   return (
     <div className="outline-1 outline-dashed h-32 cols-span-1 flex gap-3 justify-center items-center">
       <div className="hover:cursor-pointer" onClick={() => setAddNew(true)}>
@@ -140,8 +140,8 @@ const BlankCard = () => {
   );
 };
 
-const SongForm = () => {
-  const { setAddNew } = useContext(DataContext);
+const SongForm = ({setAddNew}) => {
+ 
   const [loading, setLoading] = useState(false);
 
   const [songDetail, setSongDetail] = useState({
@@ -372,11 +372,11 @@ const SongForm = () => {
 };
 
 const NewSongCard = ({ songData, isPlaying, onClick }) => {
-  const { setCurrentPlaying } = useContext(DataContext);
+
   const [play, setPlay] = useState(false);
 
   function setMediaPlay(audio) {
-    setCurrentPlaying(audio);
+   // setCurrentPlaying(audio);
     onClick();
   }
 
