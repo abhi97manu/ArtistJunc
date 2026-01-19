@@ -1,14 +1,30 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {NavLink, useNavigate} from 'react-router-dom'
 import axios from 'axios'
 
 
 
 const AdminNav = () => {
+const navigate = useNavigate()
 
-  const navigate = useNavigate()
+  useEffect(()=>{
+      function handleSyncLogout(e){
+        if(e.key==="logout" && e.newValue)
+         navigate('/')
+
+      
+      }
+        window.addEventListener("storage",handleSyncLogout)
+
+        return ()=>{
+         window.removeEventListener("storage",handleSyncLogout)
+        }
+  },[])
+
+  
 
   async function Logout(){
+    localStorage.setItem("logout",Date.now());
     try{
       const res = await axios.post(`${import.meta.env.VITE_SERVER_URL}/admin/logout`, {},{
        

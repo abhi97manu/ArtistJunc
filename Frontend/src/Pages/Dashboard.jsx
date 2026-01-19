@@ -11,6 +11,9 @@ import { Navigate, Outlet, RouterProvider, useNavigate } from 'react-router-dom'
 const Dashboard = () => {
 
   const navigate = useNavigate()
+  const recent_ck = cookieStore.get("token")
+  console.log("cookie ", recent_ck);
+  
  
   useEffect(()=>{
     async function getUSer(){
@@ -38,7 +41,7 @@ const Dashboard = () => {
       (
      
      
-        <div className=' w-full min-h-full h-screen  relative '>
+        <div className=' w-full min-h-full relative '>
             <AdminNav/>
         <div className='flex w-full h-full relative '>
          

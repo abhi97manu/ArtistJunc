@@ -1,18 +1,17 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 
-
 import Media from "../General/Media";
 
 import ImageKit from "imagekit-javascript";
+import Cards_OverV from "./Admin_components/Cards_OverV";
 
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 const AdminSec = () => {
-  
-   const [addNew, setAddNew] = useState()
+  const [addNew, setAddNew] = useState();
   const [isPlaying, setIsPlaying] = useState(null);
-  
+
   const [allSongs, setAllSongs] = useState();
   const [allAlbums, setAllAlbums] = useState({});
   const [addAlbum, setAddAlbum] = useState(false);
@@ -43,68 +42,56 @@ const AdminSec = () => {
 
   return (
     <>
-      <div className=" h-fit w-full  ">
-        <div className=" w-full ">
-          <div className="w-[100%]  h-16 flex items-center">
-            <h2 className="text-2xl w-full font-bold mx-4 border-b-2">
-              All Songs
-            </h2>
+      <div className="h-full w-full  ">
+        <div className=" lg:w-[62rem] w-full place-self-center p-2 ">
+          <div className="grid grid-cols-3 p-2 gap-3 place-self-center ">
+            <Cards_OverV label="Total Songs" value="9213" />
+            <Cards_OverV label="Total Albums" value="9213" />
+            <Cards_OverV label="Upcoming Tour" value="9213" />
           </div>
+          {/* All Songs Container */}
+          <div className=" w-full mt-7 rounded-lg shadow-2xl">
+            <div className=" h-fit flex items-center p-3 justify-between">
+              <h2 className="text-2xl  font-bold mx-4 ">All Songs</h2>
+              <BlankCard setAddNew={setAddNew} value="Add Song" />
+            </div>
 
-          <div className="w-full lg:w-[70rem] h-[100%] p-4 place-self-center grid  gap-4 items-center ">
-            {allSongs &&
-              allSongs.map((ele, i) => (
-                <NewSongCard
-                  key={i}
-                  songData={ele}
-                  isPlaying={isPlaying === i}
-                  onClick={() => {
-                    setIsPlaying(i);
-                  }}
-                />
-              ))}
-
-            <BlankCard setAddNew = {setAddNew}/>
+            <div className="w-full  overflow-y-auto h-[30rem] p-4 place-self-center grid  gap-4 items-center ">
+              {allSongs &&
+                allSongs.map((ele, i) => (
+                  <NewSongCard
+                    key={i}
+                    songData={ele}
+                    isPlaying={isPlaying === i}
+                    onClick={() => {
+                      setIsPlaying(i);
+                    }}
+                  />
+                ))}
+            </div>
           </div>
-        </div>
+          {/* <span className="w-full  h-10  -translate-y-7 border flex bg-white blur"></span> */}
 
-        <div className=" w-full h-full ">
-          <div className=" w-full h-16 flex items-center">
-            <h2 className="text-2xl w-full font-bold mx-4 border-b-2">
-              Albums
-            </h2>
-          </div>
-          <div className=" grid grid-cols-3 box-border md:grid-cols-4 p-4  gap-2 md:gap-2 h-72  overflow-y-auto  lg:gap-6 w-full lg:w-[70rem] place-self-center ">
-            {Object.entries(allAlbums).map(([key, value]) => {
-            //  console.log("albums", value);
+          {/* Add Albums List  */}
+          <div className=" w-full mt-7 rounded-lg shadow-2xl ">
+            <div className=" flex items-center p-3 justify-between">
+              <h2 className="text-2xl  font-bold mx-4 ">Albums</h2>
+              <BlankCard setAddNew={setAddAlbum} value="Add Album" />
+            </div>
+            <div className=" grid grid-cols-3 box-border md:grid-cols-4 p-4  gap-2 md:gap-2 h-72  overflow-y-auto  lg:gap-6 w-full lg:w-[70rem] place-self-center ">
+              {Object.entries(allAlbums).map(([key, value]) => {
+                //  console.log("albums", value);
 
-              return (
-                <AlbumCard key={key} name={key} data = {value}  />
-              );
-            })}
-            <div className="w-full h-full  bg-white  grid justify-center  text-center">
-              <div className="bg-black shadow-2xl w-32 h-32 mt-3 rounded-full border flex justify-center items-center bg-gradient-to-b  from-stone-950 from-10% via-stone-200 via-50% to-stone-950 to-90% ">
-                <div className="w-8 h-8 bg-red-800 rounded-full text-white bg-gradient-to-b box-content border-2 border-black  from-stone-950 from-10% via-stone-200 via-50% to-stone-950 to-90% ">
-                  <svg viewBox="-30 -30 100 100" class="w-8 h-8 ">
-                    <circle cx="20" cy="20" r="15" fill="#e4dadaff" />
-                  </svg>
-                </div>
-              </div>
-
-              <button
-                className="hover:cursor-pointer outline outline-dashed shadow-xl bg-indigo-600 rounded-xl text-white"
-                onClick={() => setAddAlbum((prev) => !prev)}
-              >
-                + New Album
-              </button>
+                return <AlbumCard key={key} name={key} data={value} />;
+              })}
             </div>
           </div>
         </div>
       </div>
 
-      {addNew && <SongForm  setAddNew= {setAddNew}/>}
+      {addNew && <SongForm setAddNew={setAddNew} />}
       {addAlbum && <AlbumForm songs={allSongs} setAddAlbum={setAddAlbum} />}
-     
+
       {/* <Media currentPlaying={currentPlaying} /> */}
     </>
   );
@@ -112,11 +99,13 @@ const AdminSec = () => {
 
 export default AdminSec;
 
-const BlankCard = ({setAddNew}) => {
-
+const BlankCard = ({ setAddNew, value }) => {
   return (
-    <div className="outline-1 outline-dashed h-32 cols-span-1 flex gap-3 justify-center items-center">
-      <div className="hover:cursor-pointer" onClick={() => setAddNew(true)}>
+    <div className=" rounded-lg bg-green-600 flex justify-center p-2 items-center">
+      <div
+        className="hover:cursor-pointer flex gap-2"
+        onClick={() => setAddNew(true)}
+      >
         <svg
           className="place-self-center"
           xmlns="http://www.w3.org/2000/svg"
@@ -134,14 +123,13 @@ const BlankCard = ({setAddNew}) => {
           <line x1="12" y1="8" x2="12" y2="16" />
           <line x1="8" y1="12" x2="16" y2="12" />
         </svg>
-        <p>Add Songs</p>
+        <p>{value}</p>
       </div>
     </div>
   );
 };
 
-const SongForm = ({setAddNew}) => {
- 
+const SongForm = ({ setAddNew }) => {
   const [loading, setLoading] = useState(false);
 
   const [songDetail, setSongDetail] = useState({
@@ -189,7 +177,7 @@ const SongForm = ({setAddNew}) => {
   };
 
   return (
-    <div className="w-full h-full bg-stone-800/60 absolute border-4 text-center flex justify-center ">
+    <div className="w-full h-full bg-stone-800/60 absolute top-0 border-2 text-center flex justify-center ">
       {!loading ? (
         <div
           className="w-72 h-fit place-self-center bg-white rounded-2xl"
@@ -217,7 +205,21 @@ const SongForm = ({setAddNew}) => {
             </svg>
           </div>
           <form className="grid gap-3 p-4" onSubmit={onSubmitHandler}>
-            <h2>Add Your Music</h2>
+            <div className="flex">
+              <h2 className="font-bold text-xl ">Add Details</h2>
+            </div>
+
+            <div className="outline-2 h-14 flex items-center justify-center outline-dashed imageFile">
+              <label className=" hover:cursor-pointer">
+                {songDetail?.ImgCover?.name ?? "+Add Music Cover"}
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={HandleImageFile}
+                ></input>
+              </label>
+            </div>
             <input
               type="text"
               placeholder="Song Title"
@@ -275,21 +277,10 @@ const SongForm = ({setAddNew}) => {
                 setSongDetail((prev) => ({ ...prev, Feat: e.target.value }))
               }
             />
-            <div className="outline-2 outline-dashed imageFile">
-              <label className=" hover:cursor-pointer">
-                + Add Music Cover
-                <input
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={HandleImageFile}
-                ></input>
-              </label>
-            </div>
 
-            <div className="outline-2 outline-dashed audioFile">
+            <div className="outline-2  h-14 flex items-center justify-center  outline-dashed audioFile">
               <label className=" hover:cursor-pointer">
-                + Add Music File
+                {songDetail?.SongFile?.name ?? "+Add Music File"}
                 <input
                   type="file"
                   accept="audio/*"
@@ -299,7 +290,7 @@ const SongForm = ({setAddNew}) => {
               </label>
             </div>
             <button className="bg-blue-400 rounded-md p-2 text-lg font-semibold cursor-pointer">
-              Lets Upload !
+              Upload !
             </button>
           </form>
         </div>
@@ -372,11 +363,10 @@ const SongForm = ({setAddNew}) => {
 };
 
 const NewSongCard = ({ songData, isPlaying, onClick }) => {
-
   const [play, setPlay] = useState(false);
 
   function setMediaPlay(audio) {
-   // setCurrentPlaying(audio);
+    // setCurrentPlaying(audio);
     onClick();
   }
 
@@ -393,7 +383,7 @@ const NewSongCard = ({ songData, isPlaying, onClick }) => {
   }
 
   return (
-    <div className="border-b-2">
+    <div className="border-b-1 p-2">
       <div className=" h-12 flex box-border px-2 ">
         <img src={songData.ImageFile} className="  w-12 "></img>
         <div className="grid grid-cols-3 items-center text-center justify-center px-2 w-full">
@@ -520,16 +510,16 @@ const NewSongCard = ({ songData, isPlaying, onClick }) => {
   );
 };
 
-const AlbumCard = ({ name, data}) => {
- // const { setCurrentPlaying, setIsPlaying } = useContext(DataContext);
-const [showAlbumlist, setShowAlbumList] = useState(false);
+const AlbumCard = ({ name, data }) => {
+  // const { setCurrentPlaying, setIsPlaying } = useContext(DataContext);
+  const [showAlbumlist, setShowAlbumList] = useState(false);
   return (
     <div className="h-62 rounded-2xl  col-span-1 text-center grid justify-center ">
       {
         <>
           <div
             className={` bg-black w-32 h-32 mt-3 rounded-full border flex justify-center items-center bg-cover bg-center transition-transform  hover:rotate-360 ease-in-out  duration-2500 delay-150`}
-             style={{ backgroundImage: `url(${data.albumImg})` }}
+            style={{ backgroundImage: `url(${data.albumImg})` }}
           >
             <div className="w-8 h-8 bg-red-800 rounded-full text-white bg-gradient-to-b box-content border-3 border-black  from-stone-950 from-10% via-stone-200 via-50% to-stone-950 to-90% font-black">
               <svg viewBox="-30 -30 100 100" class="w-8 h-8 ">
@@ -548,7 +538,13 @@ const [showAlbumlist, setShowAlbumList] = useState(false);
         </>
       }
 
-       {showAlbumlist && <AlbumSongsList songData = {data.songs} albumData = {data} toggleCard = {setShowAlbumList}/>}
+      {showAlbumlist && (
+        <AlbumSongsList
+          songData={data.songs}
+          albumData={data}
+          toggleCard={setShowAlbumList}
+        />
+      )}
     </div>
   );
 };
@@ -792,9 +788,12 @@ const AlbumForm = ({ songs, setAddAlbum }) => {
   );
 };
 
-const AlbumSongsList = ({songData, albumData, toggleCard}) => {
+const AlbumSongsList = ({ songData, albumData, toggleCard }) => {
   return (
-    <div className="w-full h-full bg-stone-800/60 absolute top-0 left-0 items-center text-center flex justify-center " onClick={()=>toggleCard(prev=>!prev)}>
+    <div
+      className="w-full h-full bg-stone-800/60 absolute top-0 left-0 items-center text-center flex justify-center "
+      onClick={() => toggleCard((prev) => !prev)}
+    >
       <div className="">
         <div
           className="w-[28rem] h-fit place-self-center bg-white rounded-2xl"
@@ -802,19 +801,18 @@ const AlbumSongsList = ({songData, albumData, toggleCard}) => {
         >
           <div className="w-full h-32 text-start px-4 items-center flex">
             <h1>{albumData.albumName}</h1>
-            <img ></img>
+            <img></img>
           </div>
 
-          {songData.map((value,key)=>{
-            return(  <div className="border-t-2 mb-2 p-4 grid grid-cols-5" key = {key}>
-            <h1 className="col-span-3">{value.Title}</h1>           
-            <h1>Play</h1>           
-            <h1>Remove</h1>           
-          </div>
-            )
-          })
-        }
-          
+          {songData.map((value, key) => {
+            return (
+              <div className="border-t-2 mb-2 p-4 grid grid-cols-5" key={key}>
+                <h1 className="col-span-3">{value.Title}</h1>
+                <h1>Play</h1>
+                <h1>Remove</h1>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>
