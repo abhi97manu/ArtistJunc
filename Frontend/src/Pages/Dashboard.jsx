@@ -1,59 +1,51 @@
-import React, { useEffect, useState } from 'react'
-import AdminNav from '../Components/Admin/AdminNav'
-import AdminSide from '../Components/Admin/AdminSide'
-import AdminSec from '../Components/Admin/AdminSec'
-import axios from 'axios'
-import { Navigate, Outlet, RouterProvider, useNavigate } from 'react-router-dom'
-
-
-
+import React, { useEffect, useState } from "react";
+import AdminNav from "../Components/Admin/AdminNav";
+import AdminSide from "../Components/Admin/AdminSide";
+import AdminSec from "../Components/Admin/AdminSec";
+import axios from "axios";
+import {
+  Navigate,
+  Outlet,
+  RouterProvider,
+  useNavigate,
+} from "react-router-dom";
 
 const Dashboard = () => {
-
-  const navigate = useNavigate()
-  const recent_ck = cookieStore.get("token")
+  const navigate = useNavigate();
+  const recent_ck = cookieStore.get("token");
   console.log("cookie ", recent_ck);
-  
- 
-  useEffect(()=>{
-    async function getUSer(){
-      try{
-        const res = await axios.get(`${import.meta.env.VITE_SERVER_URL}/admin/profile`,{
-          withCredentials:true,
-        })
-         
-          
-     }
-      catch(err){
+
+  useEffect(() => {
+    async function getUSer() {
+      try {
+       await axios.get(
+          `${import.meta.env.VITE_SERVER_URL}/admin/profile`,
+          {
+            withCredentials: true,
+          },
+        );
+      } catch (err) {
         console.log(err);
-      
-        navigate('/')
+
+        navigate("/");
       }
-       
-  
-  }
-    getUSer()
-},[])
+    }
+    getUSer();
+  }, []);
 
   return (
-<>
-    {
-      (
-     
-     
-        <div className=' w-full min-h-full relative '>
-            <AdminNav/>
-        <div className='flex w-full h-full relative '>
-         
-         <AdminSide/>
-          <Outlet/>
-       
-        
+    <>
+      {
+        <div className=" w-full min-h-full relative  ">
+          <AdminNav />
+          <div className="flex w-full h-full relative bg-zinc-200 ">
+            <AdminSide />
+            <Outlet />
+          </div>
         </div>
-    </div>
-  )}
-  </> 
-  )
-}
+      }
+    </>
+  );
+};
 
-export default Dashboard
+export default Dashboard;

@@ -2,7 +2,7 @@ import React from "react";
 
 const Cards_OverV = ({ label, value }) => {
   return (
-    <div className="border flex flex-col justify-center rounded-lg h-[8rem]">
+    <div className=" flex flex-col bg-white shadow-lg justify-center rounded-lg h-[8rem]">
       <h1 className="lg:text-2xl px-1 truncate lg:font-bold text-xl font-semibold">
         {label}
       </h1>

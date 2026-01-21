@@ -30,10 +30,10 @@ const Router = createBrowserRouter([
       {
         path: "",
         index: true,
-        element: (
-        <Suspense>
-        <AdminSec />
-      </Suspense>),
+        element: 
+       
+        <AdminSec  />
+     
       },
       {
         path: "charts",
