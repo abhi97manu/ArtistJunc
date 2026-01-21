@@ -1,15 +1,9 @@
 import React, { lazy, Suspense, useContext, useEffect, useState } from "react";
-import axios from "axios";
 
 
-const AlbumCard = lazy(() => import("./Admin_components/AlbumCard"));
 
-import Media from "../General/Media";
-
-import ImageKit from "imagekit-javascript";
 import Cards_OverV from "./Admin_components/Cards_OverV";
 
-import BlankCard from "./Admin_components/BlankCard";
 import AllSongCard from "./Admin_components/AllSongCard";
 
 
@@ -27,7 +21,7 @@ const AdminSec = () => {
             <Cards_OverV label="Upcoming Tour" value="9213" />
           </div>
           {/* All Songs Container */}
-        <AllSongCard value = "Songs" label = "All Songs" />
+         <AllSongCard value = "Songs" label = "All Songs" />
           {/* <span className="w-full  h-10  -translate-y-7 border flex bg-white blur"></span> */}
 
           {/* Add Albums List  */}

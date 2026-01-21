@@ -23,7 +23,7 @@ const AlbumSongsList = ({ songData, albumData, toggleCard }) => {
             return (
               <NewSongCard  key={key}
                     songData={value}
-
+                 
                   
                     //setAddNew={setAddNew}
                     />

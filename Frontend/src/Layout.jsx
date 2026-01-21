@@ -12,7 +12,7 @@ const Layout = () => {
   
       <RouterProvider router={Router}>
       
-      <Outlet/>
+       <Outlet/>
           
       </RouterProvider>
    
