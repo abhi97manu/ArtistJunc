@@ -1,15 +1,20 @@
-import React, { lazy, Suspense, useEffect, useState } from "react";
+import React, { lazy, Suspense, useContext, useEffect, useState } from "react";
 import BlankCard from "./BlankCard";
 import axios from "axios";
 import AlbumCard from "./AlbumCard";
 import SongForm from "./SongForm";
 import AlbumForm from "./AlbumForm";
+import {SongContext} from '../Admin_Context/Context'
 const NewSongCard = lazy(() => import("./NewSongCard"));
 
 const loader = <h1>Loading..</h1>;
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 const AllSongCard = ({ label, value }) => {
+
+  const {isPlaying,setIsPlaying} = useContext(SongContext)
+
+
   const [allSongs, setAllSongs] = useState();
   const [allAlbums, setAllAlbums] = useState({});
   const [addNew, setAddNew] = useState();
@@ -29,7 +34,7 @@ const AllSongCard = ({ label, value }) => {
     axios
       .get(`${serverUrl}/admin/albums`, { withCredentials: true })
       .then((response) => {
-        console.log(response.data);
+       // console.log(response.data);
 
         setAllAlbums(response.data);
       })
@@ -39,7 +44,8 @@ const AllSongCard = ({ label, value }) => {
     }
   }, []);
 
-  const [isPlaying, setIsPlaying] = useState(null);
+
+
   return (
     <div className=" w-full mt-7 rounded-lg shadow-2xl bg-white">
       {value == "Songs" && (
@@ -55,11 +61,11 @@ const AllSongCard = ({ label, value }) => {
               {allSongs &&
                 allSongs.map((ele, i) => (
                   <NewSongCard
-                    key={i}
+                    key={ele._id}
                     songData={ele}
-                    isPlaying={isPlaying === i}
+                    isPlaying={isPlaying === ele._id}
                     onClick={() => {
-                      setIsPlaying(i);
+                      setIsPlaying(ele._id);
                     }}
                     setAddNew={setAddNew}
                   />
@@ -75,11 +81,11 @@ const AllSongCard = ({ label, value }) => {
             <h2 className="text-2xl font-bold mx-4">{label}</h2>
             <BlankCard setAddNew={setAddNew} value={`Add ${value} `} />
           </div>
-          <div className=" grid grid-cols-3 box-border md:grid-cols-4  p-4 gap-2 md:gap-2 h-72  overflow-y-auto w-full lg:w-[60rem] place-self-center ">
+          <div className=" grid grid-cols-3 box-border md:grid-cols-4 p-4 gap-2 md:gap-2 h-72  overflow-y-auto w-full lg:w-[60rem] place-self-center ">
             <Suspense fallback={loader}>
               {" "}
               {Object.entries(allAlbums).map(([key, value]) => {
-                 console.log("albums", value);
+                
 
                 return <AlbumCard key={key} name={key} data={value} />;
               })}

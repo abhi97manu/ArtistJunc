@@ -1,18 +1,39 @@
 import axios from 'axios';
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
+import { SongContext } from '../Admin_Context/Context';
 
 const NewSongCard = ({ songData, isPlaying, onClick }) => {
   const [play, setPlay] = useState(false);
-  const [currentSong , setCurrentSong] = useState();
+  const {currentSong,setCurrentSong} = useContext(SongContext)
+ const audioRef = useRef(null);
+
+
 const serverUrl = import.meta.env.VITE_SERVER_URL;
-  function setMediaPlay(audio) {
-    // setCurrentPlaying(audio);
-    if(play)
-    setCurrentSong(audio)
-    else
-    setCurrentSong("")
+console.log("isPlaying idf ", isPlaying);
+
+
+  useEffect(()=>{
+     if(!audioRef.current) return
+
+     audioRef.current.src = currentSong
+     audioRef.current.load();
+ console.log("clicked Effect",audioRef.current);
+     
+     
+      audioRef.current.play();
+
+  },[currentSong])
+
+    function togglePlay() {
+   if(!audioRef.current) return
+   play? audioRef.current.pause()
+   :
+   audioRef.current.play()
+
+   console.log("clicked",play);
+     // setCurrentSong("")
     
-    onClick();
+    //onClick();
   }
 
   async function deleteMedia(audio) {
@@ -45,7 +66,7 @@ const serverUrl = import.meta.env.VITE_SERVER_URL;
             </h1>
           </div>
           <div className="col-span-1 place-self-end mb-2 flex  gap-2">
-            {!isPlaying || !play ? (
+            { !isPlaying || !play ? (
               <svg
                 fill="#03643fff"
                 height="30px"
@@ -57,9 +78,11 @@ const serverUrl = import.meta.env.VITE_SERVER_URL;
                 viewBox="0 0 492.308 492.308"
                 xml:space="preserve"
                 onClick={() => {
-                  setMediaPlay(songData.AudioFile);
-                  onClick;
-                  setPlay((prev) => !prev);
+                  setCurrentSong(songData.AudioFile)
+                  onClick();
+                  setPlay(true);
+                  togglePlay()
+                 
                 }}
                 className="hover:cursor-pointer"
               >
@@ -90,8 +113,9 @@ const serverUrl = import.meta.env.VITE_SERVER_URL;
                 viewBox="0 0 492.308 492.308"
                 xml:space="preserve"
                 onClick={() => {
-                  onClick;
-                  setPlay((prev) => !prev);
+                //  onClick();
+                  setPlay(false);
+                 togglePlay()
                 }}
                 className="hover:cursor-pointer"
               >
@@ -147,7 +171,7 @@ const serverUrl = import.meta.env.VITE_SERVER_URL;
       </div>
       {isPlaying && (
         <div className="w-full justify-center items-center gap-2 px-2 flex h-3 bg-blue-200">
-          <audio src= {currentSong} autoPlay></audio>
+         { <audio  ref = {audioRef}></audio>}
           <p className="text-[10px]">2:30</p>
           <input type="range" className="w-full slider"></input>
           <p className="text-[10px]">2:30</p>

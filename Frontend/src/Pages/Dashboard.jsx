@@ -9,6 +9,7 @@ import {
   RouterProvider,
   useNavigate,
 } from "react-router-dom";
+import SongProvider from "../Components/Admin/Admin_Context/Context.jsx";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -18,12 +19,9 @@ const Dashboard = () => {
   useEffect(() => {
     async function getUSer() {
       try {
-       await axios.get(
-          `${import.meta.env.VITE_SERVER_URL}/admin/profile`,
-          {
-            withCredentials: true,
-          },
-        );
+        await axios.get(`${import.meta.env.VITE_SERVER_URL}/admin/profile`, {
+          withCredentials: true,
+        });
       } catch (err) {
         console.log(err);
 
@@ -35,15 +33,15 @@ const Dashboard = () => {
 
   return (
     <>
-      {
-        <div className=" w-full min-h-full relative  ">
-          <AdminNav />
-          <div className="flex w-full h-full relative bg-zinc-200 ">
+      <div className=" w-full min-h-full relative  ">
+        <AdminNav />
+        <div className="flex w-full h-full relative bg-zinc-200 ">
+          <SongProvider>
             <AdminSide />
             <Outlet />
-          </div>
+          </SongProvider>
         </div>
-      }
+      </div>
     </>
   );
 };

@@ -109,6 +109,7 @@ userRouter.get("/albums",async (req, res) => {
           albumImg:1,
           createdAt:1,
           songs :{
+            _id:1,
             Title: 1,
             AudioFile:1,
             ImageFile:1
