@@ -79,7 +79,7 @@ const AllSongCard = ({ label, value }) => {
         <>
           <div className=" h-fit flex items-center p-4 justify-between">
             <h2 className="text-2xl font-bold mx-4">{label}</h2>
-            <BlankCard setAddNew={setAddNew} value={`Add ${value} `} />
+            <BlankCard setAddNew={setAddAlbum} value={`Add ${value} `} />
           </div>
           <div className=" grid grid-cols-3 box-border md:grid-cols-4 p-4 gap-2 md:gap-2 h-72  overflow-y-auto w-full lg:w-[60rem] place-self-center ">
             <Suspense fallback={loader}>

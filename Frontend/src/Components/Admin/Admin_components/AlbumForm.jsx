@@ -65,7 +65,7 @@ const AlbumForm = ({ songs, setAddAlbum }) => {
   console.log("song list ", albumDetails.AlbumSongs);
   return (
     <div
-      className="w-full h-full bg-stone-800/60 absolute  text-center flex justify-center "
+      className="w-full h-full bg-stone-800/60 absolute top-0 left-0 text-center flex justify-center "
       onClick={() => setAddAlbum((prev) => !prev)}
     >
       {!loading ? (

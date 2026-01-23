@@ -1,38 +1,74 @@
-import axios from 'axios';
-import React, { useContext, useEffect, useRef, useState } from 'react'
-import { SongContext } from '../Admin_Context/Context';
+import axios from "axios";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { SongContext } from "../Admin_Context/Context";
+import { setIsPlaying } from "../../../Store/Slice/SongSlice";
 
 const NewSongCard = ({ songData, isPlaying, onClick }) => {
   const [play, setPlay] = useState(false);
-  const {currentSong,setCurrentSong} = useContext(SongContext)
- const audioRef = useRef(null);
+  const { currentSong, setCurrentSong } = useContext(SongContext);
+  const audioRef = useRef(null);
 
+  const serverUrl = import.meta.env.VITE_SERVER_URL;
+  console.log("isPlaying idf ", isPlaying);
+  const [metadata, setMetaData] = useState({
+    duration: 0,
+    currentTime: 0,
+    volume: 0,
+  });
 
-const serverUrl = import.meta.env.VITE_SERVER_URL;
-console.log("isPlaying idf ", isPlaying);
-
-
-  useEffect(()=>{
-     if(!audioRef.current) return
-
-     audioRef.current.src = currentSong
-     audioRef.current.load();
- console.log("clicked Effect",audioRef.current);
-     
-     
-      audioRef.current.play();
-
-  },[currentSong])
-
-    function togglePlay() {
-   if(!audioRef.current) return
-   play? audioRef.current.pause()
-   :
-   audioRef.current.play()
-
-   console.log("clicked",play);
-     // setCurrentSong("")
+    console.log("current Song",currentSong);
     
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    audio.src = currentSong;
+    audio.load();
+audio.play()
+    audio.addEventListener("loadedmetadata", () => {
+      setMetaData({
+        duration: audio.duration,
+        volume: audio.volume,
+      });
+    });
+
+    // audio.play();
+
+    return () =>{
+      audio.removeEventListener("loadedmetadata", () => {
+        setMetaData({
+          duration: audio.duration,
+
+          volume: audio.volume,
+        });
+      });
+    
+    }
+  }, [currentSong]);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    audio.addEventListener("timeupdate", () => {
+      setMetaData({ ...metadata, currentTime: audio.currentTime ?? 0 });
+    });
+
+    return () =>
+      removeEventListener("timeupdate", () => {
+        setMetaData({ ...metadata, currentTime: audio.currentTime ?? 0 });
+      });
+  }, [metadata]);
+
+ 
+  function togglePlay() {
+    const audio = audioRef.current;
+    if (!audio) return;
+ 
+    
+    play ? audio.pause() : audio.play();
+
+    // setCurrentSong("")
+
     //onClick();
   }
 
@@ -40,18 +76,24 @@ console.log("isPlaying idf ", isPlaying);
     try {
       const res = await axios.delete(
         `${serverUrl}/admin/delete_song/${audio._id}`,
-        { withCredentials: true }
+        { withCredentials: true },
       );
       console.log("deleted song ", res);
-     
     } catch (err) {
       console.log("error in deleting song ", err);
     }
   }
 
+  function timeFormat(time) {
+    if (isNaN(time)) return "0:00";
+    const min = Math.floor(time / 60);
+    const sec = Math.floor(time % 60);
+    return `${min}:${sec.toString().padStart(2, "0")}`;
+  }
+
   return (
-    <div className="border-b-1 p-2">
-      <div className=" h-12 flex box-border px-2 ">
+    <div className="border-b-1 p-2 flex flex-col gap-2">
+      <div className=" h-12  flex box-border px-2 ">
         <img src={songData.ImageFile} className="  w-12 "></img>
         <div className="grid grid-cols-3 items-center text-center justify-center px-2 w-full">
           <div className="col-span-2 leading-4 items-center px-6 ">
@@ -66,7 +108,7 @@ console.log("isPlaying idf ", isPlaying);
             </h1>
           </div>
           <div className="col-span-1 place-self-end mb-2 flex  gap-2">
-            { !isPlaying || !play ? (
+            {!isPlaying || !play ? (
               <svg
                 fill="#03643fff"
                 height="30px"
@@ -78,10 +120,10 @@ console.log("isPlaying idf ", isPlaying);
                 viewBox="0 0 492.308 492.308"
                 xml:space="preserve"
                 onClick={() => {
-                  setCurrentSong(songData.AudioFile)
+                  setCurrentSong(songData.AudioFile);
                   onClick();
                   setPlay(true);
-                  togglePlay()
+                  togglePlay();
                  
                 }}
                 className="hover:cursor-pointer"
@@ -113,9 +155,9 @@ console.log("isPlaying idf ", isPlaying);
                 viewBox="0 0 492.308 492.308"
                 xml:space="preserve"
                 onClick={() => {
-                //  onClick();
+                  //  onClick();
                   setPlay(false);
-                 togglePlay()
+                  togglePlay();
                 }}
                 className="hover:cursor-pointer"
               >
@@ -170,14 +212,20 @@ console.log("isPlaying idf ", isPlaying);
         </div>
       </div>
       {isPlaying && (
-        <div className="w-full justify-center items-center gap-2 px-2 flex h-3 bg-blue-200">
-         { <audio  ref = {audioRef}></audio>}
-          <p className="text-[10px]">2:30</p>
-          <input type="range" className="w-full slider"></input>
-          <p className="text-[10px]">2:30</p>
+        <div className="w-full justify-center items-center gap-4 px-3 bg-sky-400 rounded-lg flex h-6 ">
+          {<audio ref={audioRef}></audio>}
+          <p className="text-[12px] w-8">{timeFormat(metadata?.currentTime)}</p>
+          <input
+            type="range"
+            className="w-full slider"
+            min="0.0"
+            max={Math.floor(metadata?.duration)}
+            value={metadata?.currentTime}
+          ></input>
+          <p className="text-[12px]">{timeFormat(metadata?.duration)}</p>
         </div>
       )}
     </div>
   );
 };
-export default NewSongCard
+export default NewSongCard;

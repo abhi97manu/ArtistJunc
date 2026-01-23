@@ -30,7 +30,7 @@ const Media = () => {
       setAudioDuration(file.duration);
     });
     file.addEventListener("timeupdate", () => {
-      setCurr_Time(audioRef.current.currentTime);
+      setCurr_Time(file.currentTime);
     });
  
   },[]);

@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import AlbumSongsList from './AlbumSongsList';
 
 const AlbumCard = ({ data }) => {
+  
+  
   // const { setCurrentPlaying, setIsPlaying } = useContext(DataContext);
   const [showAlbumlist, setShowAlbumList] = useState(false);
   return (
