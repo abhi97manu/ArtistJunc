@@ -90,3 +90,16 @@ export  function useGetSong() {
         
     }
   }
+
+  export async function getAlbumSongs(id){
+    try{
+      const resp = await axios.get(`${Server_URL}/albums/albumSong?search=${id}`)
+       console.log(resp.data);
+            return resp.data
+    }
+     catch(err){
+        console.log(err);
+        
+    }
+
+  }

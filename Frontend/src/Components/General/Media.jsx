@@ -9,7 +9,11 @@ const Server_URL = import.meta.env.VITE_SERVER_URL;
 const Media = () => {
   const [crnt_time, setCurr_Time] = useState();
   
-  const [audioDuration, setAudioDuration] = useState(0);
+  const [audioMetData, setAudioMetData] = useState({
+    duration : 0,
+    currentTime: 0,
+    volume:0
+  });
   const isPlaying = useSelector((state) => state.currentPlaying.isPlaying);
   const songId = useSelector((state) => state.currentPlaying.songId);
   const currentSong = useSelector((state)=> state.currentPlaying.currentSong)
@@ -19,7 +23,7 @@ const Media = () => {
   useEffect(() => {
     if (!audioRef.current) return;
    
-    console.log("AudioRef");
+    
     
     const file = audioRef.current;
     file.src = currentSong.AudioFile;
@@ -27,14 +31,24 @@ const Media = () => {
 
     file.addEventListener("loadedmetadata", () => {
      // console.log(file.duration);
-      setAudioDuration(file.duration);
+      setAudioMetData({duration: file.duration});
     });
-    file.addEventListener("timeupdate", () => {
-      setCurr_Time(file.currentTime);
-    });
+   
+
+  
+  
  
   },[]);
 
+  useEffect(()=>{
+     if (!audioRef.current) return;
+      const file = audioRef.current;
+      file.addEventListener("timeupdate", () => {
+        setAudioMetData({...audioMetData, currentTime: file.currentTime});
+
+    });
+
+  },[audioMetData])
 //console.log("here current Song i nMEda", currentSong);
 
   function PlayPause() {
@@ -49,28 +63,33 @@ const Media = () => {
  if (!audioRef.current) return;
     if (isPlaying) {
       audioRef.current.play();
-      console.log("True playing", isPlaying);
+    
     } else {
       audioRef.current.pause();
-     console.log("false Playing", isPlaying);
+    
     }
     
   },[isPlaying])
  
 
   
-   
+   function timeFormat(time) {
+    if (isNaN(time)) return "0:00";
+    const min = Math.floor(time / 60);
+    const sec = Math.floor(time % 60);
+    return `${min}:${sec.toString().padStart(2, "0")}`;
+  }
 
 
 
   return (
-    <div className=" w-full items-center text-white h-24 bg-stone-950/70 p-2 rounded-2xl flex flex-col bottom-2 fixed z-10">
+    <div className=" w-full items-center text-white h-24 bg-stone-950/70 py-2 rounded-sm flex flex-col bottom-2 fixed z-10">
       <div className="  text-center flex px-2 w-full items-center justify-between ">
         <div className="flex w-[50%] items-center gap-2">
           <img
             src={currentSong.ImageFile}
             alt="song_title"
-            className="w-[3rem] rounded-2xl"
+            className="w-[3rem] h-[3rem] rounded"
           ></img>
           <p>{currentSong.Title}</p>
         </div>
@@ -198,14 +217,17 @@ const Media = () => {
         </div>
       </div>
 
-      <div className=" h-fit w-[90%] place-self-center">
+      <div className=" h-fit w-[90%] flex items-center gap-3 place-self-center">
+        <h1>{timeFormat(audioMetData?.currentTime)}</h1>
         <input
           type="range"
           className="slider"
-          min="0"
-          max={Number(audioDuration)}
-          value={Number(crnt_time)}
+          min={0}
+          max={Math.floor(audioMetData?.duration)}
+          value={(audioMetData?.currentTime)}
         ></input>
+       
+        <h1>{timeFormat(audioMetData?.duration)}</h1>
       </div>
       <audio src={currentSong.AudioFile} ref={audioRef} autoPlay></audio>
     </div>
