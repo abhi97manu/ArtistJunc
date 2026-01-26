@@ -42,12 +42,12 @@ const AllSongCard = ({ label, value }) => {
     {
       console.log(" in albums read");
     }
-  }, []);
+  }, [addNew, addAlbum]);
 
 
 
   return (
-    <div className=" w-full mt-7 rounded-lg shadow-2xl bg-white">
+    <div className=" w-full mt-7  rounded-lg shadow-2xl bg-white">
       {value == "Songs" && (
         <>
           {" "}
@@ -77,11 +77,11 @@ const AllSongCard = ({ label, value }) => {
 
       {value == "Album" && (
         <>
-          <div className=" h-fit flex items-center p-4 justify-between">
+          <div className=" h-fit  flex items-center p-4 justify-between">
             <h2 className="text-2xl font-bold mx-4">{label}</h2>
             <BlankCard setAddNew={setAddAlbum} value={`Add ${value} `} />
           </div>
-          <div className=" grid grid-cols-3 box-border md:grid-cols-4 p-4 gap-2 md:gap-2 h-72  overflow-y-auto w-full lg:w-[60rem] place-self-center ">
+          <div className=" grid grid-cols-3 box-border md:grid-cols-4 p-2 gap-2 md:gap-4 h-64  overflow-y-auto overflow-x-hidden w-full md:w-[90%]  place-self-center ">
             <Suspense fallback={loader}>
               {" "}
               {Object.entries(allAlbums).map(([key, value]) => {

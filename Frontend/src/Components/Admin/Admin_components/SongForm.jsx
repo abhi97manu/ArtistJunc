@@ -51,10 +51,10 @@ const SongForm = ({ setAddNew }) => {
   };
 
   return (
-    <div className="w-full h-full bg-stone-800/60 absolute top-0 left-0 text-center flex justify-center ">
+    <div className="w-full h-full bg-stone-800/60 absolute top-0 left-0  flex justify-center ">
       {!loading ? (
         <div
-          className="w-72 h-fit place-self-center bg-white rounded-2xl"
+          className="w-[80%] md:w-[60%] h-fit place-self-center bg-stone-100  rounded-2xl"
           onClick={(e) => e.stopPropagation()}
         >
           <div
@@ -83,7 +83,7 @@ const SongForm = ({ setAddNew }) => {
               <h2 className="font-bold text-xl ">Add Details</h2>
             </div>
 
-            <div className="outline-2 h-14 flex items-center justify-center outline-dashed imageFile">
+            <div className="outline-2 h-32 flex items-center justify-center outline-dashed imageFile">
               <label className=" hover:cursor-pointer">
                 {songDetail?.ImgCover?.name ?? "+Add Music Cover"}
                 <input
@@ -94,57 +94,21 @@ const SongForm = ({ setAddNew }) => {
                 ></input>
               </label>
             </div>
+            <label className='text-sm font-semibold mt-2 leading-2'>Song Title</label>
             <input
               type="text"
-              placeholder="Song Title"
+              placeholder="Enter song title"
               className="border italic p-2"
               value={songDetail.Title}
               onChange={(e) =>
                 setSongDetail((prev) => ({ ...prev, Title: e.target.value }))
               }
             />
-            <div className="flex text-center items-cetner gap-4">
-              <label>
-                Single{" "}
-                <input
-                  type="radio"
-                  name="Cover"
-                  value="Single"
-                  onChange={(e) =>
-                    setSongDetail((prev) => ({ ...prev, Type: e.target.value }))
-                  }
-                />
-              </label>
-              <label>
-                Album{" "}
-                <input
-                  type="radio"
-                  name="Cover"
-                  value="Album"
-                  onChange={(e) =>
-                    setSongDetail((prev) => ({ ...prev, Type: e.target.value }))
-                  }
-                />
-              </label>
-            </div>
-            {songDetail.Type == "Album" && (
-              <input
-                type="text"
-                placeholder="Album Name"
-                className="border italic p-2"
-                value={songDetail.AlbumName}
-                onChange={(e) =>
-                  setSongDetail((prev) => ({
-                    ...prev,
-                    AlbumName: e.target.value,
-                  }))
-                }
-              />
-            )}
 
+            <label className='text-sm font-semibold mt-2 leading-2'>Featured Artist (Optional)</label>
             <input
               type="text"
-              placeholder="Any Feat."
+              placeholder="Eg. Artist Name"
               className="border italic p-2"
               value={songDetail.Feat}
               onChange={(e) =>
@@ -152,7 +116,7 @@ const SongForm = ({ setAddNew }) => {
               }
             />
 
-            <div className="outline-2  h-14 flex items-center justify-center  outline-dashed audioFile">
+            <div className="outline-2  h-32 flex items-center justify-center  outline-dashed audioFile">
               <label className=" hover:cursor-pointer">
                 {songDetail?.SongFile?.name ?? "+Add Music File"}
                 <input

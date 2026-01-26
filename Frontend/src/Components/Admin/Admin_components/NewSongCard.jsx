@@ -98,7 +98,7 @@ audio.play()
         <div className="grid grid-cols-3 items-center text-center justify-center px-2 w-full">
           <div className="col-span-2 leading-4 items-center px-6 ">
             <div className="flex gap-2 items-center">
-              <h1 className="text-md font-extrabold">{songData.Title}</h1>
+              <h1 className="text-md font-bold">{songData.Title}</h1>
               <span className="h-1 w-1 rounded-full bg-black"></span>
               <h1 className="text-sm font-medium underline">{songData.Feat}</h1>
             </div>
@@ -110,7 +110,7 @@ audio.play()
           <div className="col-span-1 place-self-end mb-2 flex  gap-2">
             {!isPlaying || !play ? (
               <svg
-                fill="#03643fff"
+                fill="rgb(6, 40, 194)"
                 height="30px"
                 width="30px"
                 version="1.1"
@@ -145,7 +145,7 @@ audio.play()
               </svg>
             ) : (
               <svg
-                fill="#03643fff"
+                fill="rgb(6, 40, 194)"
                 height="30px"
                 width="30px"
                 version="1.1"

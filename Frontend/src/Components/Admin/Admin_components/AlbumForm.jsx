@@ -1,5 +1,5 @@
-import axios from 'axios';
-import React, { useState } from 'react'
+import axios from "axios";
+import React, { useState } from "react";
 
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
@@ -65,12 +65,12 @@ const AlbumForm = ({ songs, setAddAlbum }) => {
   console.log("song list ", albumDetails.AlbumSongs);
   return (
     <div
-      className="w-full h-full bg-stone-800/60 absolute top-0 left-0 text-center flex justify-center "
+      className="w-full h-full bg-stone-800/60 absolute top-0 left-0  flex justify-center "
       onClick={() => setAddAlbum((prev) => !prev)}
     >
       {!loading ? (
         <div
-          className="w-72 h-fit place-self-center bg-white rounded-2xl"
+          className="w-[80%] md:w-[60%] h-fit place-self-center bg-white rounded-2xl"
           onClick={(e) => e.stopPropagation()}
         >
           <div
@@ -94,8 +94,45 @@ const AlbumForm = ({ songs, setAddAlbum }) => {
               <line x1="16" y1="8" x2="8" y2="16" />
             </svg>
           </div>
-          <form className="grid gap-3 p-4" onSubmit={(e) => submitAlbum(e)}>
-            <h2>Add Your Album</h2>
+          <form className="grid gap-3 p-4 " onSubmit={(e) => submitAlbum(e)}>
+            <h2 className="font-bold text-xl">Add Your Album</h2>
+            <label className="text-sm font-semibold mt-2 leading-2">
+              Album Cover
+            </label>
+            <div className="outline-2 h-32 flex items-center justify-center outline-dashed z-10">
+              <input
+                type="file"
+                id="add-album-cover"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => {
+                  setCoverImg(e.target.files);
+                  setAlbumDetails((prev) => ({
+                    ...prev,
+                    AlbumImg: e.target.files[0],
+                  }));
+                }}
+              ></input>
+              <label
+                className=" hover:cursor-pointer h-full w-full items-center flex justify-center"
+                for="add-album-cover"
+              >
+                {coverImg?.[0] ? (
+                  <div className=" h-32 flex items-center justify-center">
+                    <img
+                      src={URL.createObjectURL(coverImg[0])}
+                      className=" h-full object-cover"
+                    ></img>
+                  </div>
+                ) : (
+                  <span className="  ">+ Add Album Cover</span>
+                )}
+              </label>
+            </div>
+
+            <label className="text-sm font-semibold mt-2 leading-2">
+              Album Title{" "}
+            </label>
             <input
               type="text"
               placeholder="Album Title"
@@ -103,40 +140,16 @@ const AlbumForm = ({ songs, setAddAlbum }) => {
               onChange={(e) =>
                 setAlbumDetails((prev) => ({ ...prev, Title: e.target.value }))
               }
-              className="border italic p-2"
+              className="border italic p-2 "
             />
-            <div className="outline-2 outline-dashed imageFile">
-              <label className=" hover:cursor-pointer">
-                + Add Album Cover
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => {
-                    setCoverImg(e.target.files);
-                    setAlbumDetails((prev) => ({
-                      ...prev,
-                      AlbumImg: e.target.files[0],
-                    }));
-                  }}
-                  className="hidden"
-                ></input>
-              </label>
-            </div>
-            {coverImg && (
-              <div>
-                <img src={coverImg[0].name}></img>
-              </div>
-            )}
 
-            <div className="flex text-center items-cetner gap-4"></div>
-
-            <div className="flex gap-2">
+            <div className="flex gap-2 ">
               <select
-                className="w-full"
-                value={selectedSong}
+                className="w-full bg-blue-300 p-2 rounded"
+                value={selectedSong ?? null}
                 onChange={(e) => setSelectedSong(e.target.value)}
               >
-                <option className="text-stone-200 " disabled value="">
+                <option className="text-stone-200 " selected disabled value="">
                   Pick from List
                 </option>
                 {songs.map((v, k) => {
@@ -149,10 +162,24 @@ const AlbumForm = ({ songs, setAddAlbum }) => {
               </select>
               <button
                 type="button"
-                className="bg-blue-300 px-2 rounded text-center text-xl flex items-center hover:cursor-pointer"
+                className={`bg-blue-300 px-2 rounded text-center text-xl flex items-center hover:cursor-pointer ${!selectedSong && "opacity-50 cursor-not-allowed"}`}
                 onClick={() => addSongsToList(selectedSong)}
+                disabled={!selectedSong}
               >
-                +
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 5V19M5 12H19"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  />
+                </svg>
               </button>
             </div>
             <div>
@@ -242,4 +269,4 @@ const AlbumForm = ({ songs, setAddAlbum }) => {
   );
 };
 
-export default AlbumForm
+export default AlbumForm;

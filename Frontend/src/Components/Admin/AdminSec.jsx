@@ -13,18 +13,18 @@ const AdminSec = () => {
  
   return (
     <>
-      <div className="h-full w-full  ">
-        <div className=" lg:w-[62rem] w-full place-self-center p-2 ">
-          <div className="grid grid-cols-3 p-2 gap-3 place-self-center ">
-            <Cards_OverV label="Total Songs" value="9213" />
-            <Cards_OverV label="Total Albums" value="9213" />
-            <Cards_OverV label="Upcoming Tour" value="9213" />
+      <div className="h-full md:w-[80%] w-full ">
+        <div className=" lg:w-[80%] w-full place-self-center p-2 ">
+          <div className="grid grid-cols-3 p-2 gap-3  ">
+            <Cards_OverV label="Total Songs" value="9213" icon= "music_card_logo.svg" />
+            <Cards_OverV label="Total Albums" value="9213" icon= "album_card.svg" />
+            <Cards_OverV label="Upcoming Tour" value="9213" icon= "tour.svg" />
           </div>
           {/* All Songs Container */}
-         <AllSongCard value = "Songs" label = "All Songs" />
+         <AllSongCard value = "Songs" label = "My Songs" />
 
           {/* Add Albums List  */}
-          <AllSongCard value = "Album" label = "All Albums" ></AllSongCard>
+          <AllSongCard value = "Album" label = "My Albums" ></AllSongCard>
           
         </div>
       </div>
