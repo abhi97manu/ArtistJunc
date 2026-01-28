@@ -59,7 +59,7 @@ tourRouter.get('/getTours', async(req,res)=>{
     }
     res.status(200).json(user.tours)
 
-    console.log("tourData" , user.tours);
+ //   console.log("tourData" , user.tours);
     
 })
 

@@ -5,6 +5,7 @@ import React, { lazy, Suspense, useContext, useEffect, useState } from "react";
 import Cards_OverV from "./Admin_components/Cards_OverV";
 
 import AllSongCard from "./Admin_components/AllSongCard";
+import AlbumCarasoul from "./Admin_components/AlbumCarasoul";
 
 
 const AdminSec = () => {
@@ -25,6 +26,8 @@ const AdminSec = () => {
 
           {/* Add Albums List  */}
           <AllSongCard value = "Album" label = "My Albums" ></AllSongCard>
+
+         {/* <AlbumCarasoul/> */}
           
         </div>
       </div>

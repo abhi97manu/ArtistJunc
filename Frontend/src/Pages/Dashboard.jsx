@@ -33,7 +33,7 @@ const Dashboard = () => {
 
   return (
     <>
-      <div className=" w-full min-h-full relative  ">
+      <div className=" w-full h-full relative  ">
         <AdminNav />
         <div className="flex w-full h-full relative bg-zinc-200 ">
           <SongProvider>

@@ -9,14 +9,14 @@ const NewSongCard = ({ songData, isPlaying, onClick }) => {
   const audioRef = useRef(null);
 
   const serverUrl = import.meta.env.VITE_SERVER_URL;
-  console.log("isPlaying idf ", isPlaying);
+ // console.log("isPlaying idf ", isPlaying);
   const [metadata, setMetaData] = useState({
     duration: 0,
     currentTime: 0,
     volume: 0,
   });
 
-    console.log("current Song",currentSong);
+    //console.log("current Song",currentSong);
     
   useEffect(() => {
     const audio = audioRef.current;

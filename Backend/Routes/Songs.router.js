@@ -30,7 +30,7 @@ router.post(
     );
     const songFileData = await uploadSongToI_KIT(req.files.SongFile);
 
-    console.log(imageFileData, "::", songFileData);
+   // console.log(imageFileData, "::", songFileData);
 
     const songs = await songsModal.create({
       Title: req.body.Title,
@@ -50,7 +50,7 @@ router.post(
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    console.log("user found and updated ", user);
+  //  console.log("user found and updated ", user);
 
     res.json({
       message: "created Sucessfully!",
@@ -61,7 +61,7 @@ router.post(
 );
 
 router.get("/getSong/:id", async (req, res) => {
-  console.log("issue here ?? ", req.params.id);
+//  console.log("issue here ?? ", req.params.id);
 
   try {
     const data = await songsModal.findById(req.params.id);
@@ -92,10 +92,10 @@ router.get("/getSong/:id", async (req, res) => {
 });
 
 router.get("/getAllSongs/:id", async (req, res) => {
-  console.log(req.params.id);
+ // console.log(req.params.id);
   const { limit, page } = req.query;
   const skip = page * limit;
-  console.log(skip);
+//  console.log(skip);
 
   try {
    
@@ -136,7 +136,7 @@ router.get("/getRecentSong",async (req,res)=>{
  
   try{
       const data = await songsModal.findOne().sort({createdAt:-1})
-       console.log(data);
+  //     console.log(data);
        if(data)
         res.status(200).json(data)
   }

@@ -150,7 +150,7 @@ const AlbumForm = ({ songs, setAddAlbum }) => {
                 onChange={(e) => setSelectedSong(e.target.value)}
               >
                 <option className="text-stone-200 " selected disabled value="">
-                  Pick from List
+                  Pick from All Songs
                 </option>
                 {songs.map((v, k) => {
                   return (
