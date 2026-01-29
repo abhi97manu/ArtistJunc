@@ -101,7 +101,8 @@ userRouter.get("/albums", async (req, res) => {
   }
   const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
   //console.log(typeof decoded.id);
-
+  const limit = parseInt(req.query.limit) || 4;
+  const offset = parseInt(req.query.offset) || 0;
   const content = await albumModal.aggregate([
     {
       $match: { artist_id: new mongoose.Types.ObjectId(decoded.id) },
@@ -113,6 +114,12 @@ userRouter.get("/albums", async (req, res) => {
         foreignField: "_id",
         as: "songs",
       },
+    },
+    {
+      $skip: offset,
+    },
+    {
+      $limit: limit,
     },
     {
       $project: {

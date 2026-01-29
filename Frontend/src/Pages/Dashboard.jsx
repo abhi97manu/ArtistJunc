@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import AdminNav from "../Components/Admin/AdminNav";
 import AdminSide from "../Components/Admin/AdminSide";
-import AdminSec from "../Components/Admin/AdminSec";
+
 import axios from "axios";
 import {
   Navigate,

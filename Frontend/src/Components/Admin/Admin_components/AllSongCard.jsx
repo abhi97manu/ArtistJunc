@@ -4,34 +4,35 @@ import axios from "axios";
 import AlbumCard from "./AlbumCard";
 import SongForm from "./SongForm";
 import AlbumForm from "./AlbumForm";
-import {SongContext} from '../Admin_Context/Context'
+import { SongContext } from "../Admin_Context/Context";
 const NewSongCard = lazy(() => import("./NewSongCard"));
-import {getTotalAlbums} from "../../../userApiData";
+import { getTotalAlbums, getAlbums } from "../../../userApiData";
 import AlbumCarasoul from "./AlbumCarasoul";
 
 const loader = <h1>Loading..</h1>;
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 const AllSongCard = ({ label, value }) => {
-
-  const {isPlaying,setIsPlaying} = useContext(SongContext)
-
+  const { isPlaying, setIsPlaying } = useContext(SongContext);
 
   const [allSongs, setAllSongs] = useState();
   const [allAlbums, setAllAlbums] = useState({});
-  const [totalAlbums, setTotalAlbums] = useState(0);
+  const [totalAlbum, setTotalAlbum] = useState(0);
   const [addNew, setAddNew] = useState();
-   const [addAlbum, setAddAlbum] = useState(false);
+  const [addAlbum, setAddAlbum] = useState(false);
 
   useEffect(() => {
-
+    
     const total = async () => {
       const res = await getTotalAlbums();
-    //  console.log("total album ", res);
-      
-      setTotalAlbums(res);
-    }
-    total()
+
+    
+      //  console.log("total album ", res);
+
+      setTotalAlbum(res);
+    };
+    total();
+  
     axios
       .get(`${serverUrl}/admin/userSongs`, { withCredentials: true })
       .then((response) => {
@@ -42,7 +43,7 @@ const AllSongCard = ({ label, value }) => {
         console.log("error : ", error);
       });
 
-     
+ 
     // axios
     //   .get(`${serverUrl}/admin/albums`, { withCredentials: true })
     //   .then((response) => {
@@ -54,9 +55,7 @@ const AllSongCard = ({ label, value }) => {
     // {
     //   console.log(" in albums read");
     // }
-  }, [addNew, addAlbum]);
-
-
+  },[]);
 
   return (
     <div className=" w-full mt-7  rounded-lg shadow-2xl bg-white">
@@ -94,7 +93,7 @@ const AllSongCard = ({ label, value }) => {
             <BlankCard setAddNew={setAddAlbum} value={`Add ${value} `} />
           </div>
 
-           <AlbumCarasoul itemCount={totalAlbums} />
+          <AlbumCarasoul itemCount={totalAlbum} albums={allAlbums} />
           {/* <div className=" grid grid-cols-3 box-border md:grid-cols-4 p-2 gap-2 md:gap-4 h-64  overflow-y-auto overflow-x-hidden w-full md:w-[90%]  place-self-center ">
             <Suspense fallback={loader}>
               {" "}
@@ -107,11 +106,9 @@ const AllSongCard = ({ label, value }) => {
           </div> */}
         </>
       )}
-        {addNew && <SongForm setAddNew={setAddNew} />}
+      {addNew && <SongForm setAddNew={setAddNew} />}
       {addAlbum && <AlbumForm songs={allSongs} setAddAlbum={setAddAlbum} />}
     </div>
-
-     
   );
 };
 

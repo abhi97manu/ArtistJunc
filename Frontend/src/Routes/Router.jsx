@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 
 import { lazy, Suspense } from "react";
+import Loader from "../Components/Admin/Admin_components/Loader";
 
 const Register = lazy(() => import("../Pages/Register"));
 const LandingPage = lazy(() => import("../Pages/LandingPage"));
@@ -14,7 +15,7 @@ const Router = createBrowserRouter([
   {
     path: "/",
     element: (
-      <Suspense  fallback = {loader}>
+      <Suspense  fallback = {<Loader/>}>
         <Register />
       </Suspense>
     ),
@@ -22,7 +23,7 @@ const Router = createBrowserRouter([
   {
     path: "/Dashboard",
     element: (
-      <Suspense  fallback = {loader}>
+      <Suspense  fallback = {<Loader/>}>
     <Dashboard />
     </Suspense>
   ),
@@ -41,13 +42,13 @@ const Router = createBrowserRouter([
       },
       {
         path: "manageTours",
-        element: (<Suspense fallback = {loader}><ManageTours /></Suspense>),
+        element: (<Suspense fallback = {<Loader/>}><ManageTours /></Suspense>),
       },
     ],
   },
   {
     path: "/landing",
-    element:(<Suspense fallback = {loader}> <LandingPage /></Suspense>),
+    element:(<Suspense fallback = {<Loader/>}> <LandingPage /></Suspense>),
   },
 ]);
 export default Router;
