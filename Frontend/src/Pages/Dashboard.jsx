@@ -25,7 +25,7 @@ const Dashboard = () => {
       } catch (err) {
         console.log(err);
 
-        navigate("/");
+        navigate("/login");
       }
     }
     getUSer();

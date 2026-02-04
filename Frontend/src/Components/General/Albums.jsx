@@ -12,8 +12,8 @@ const Albums = ({albumData}) => {
   
   const [showCard, setShowCard] = useState(false);
   return (
-    <div className='hover:scale-110' onMouseEnter={() => setShowCard(prev => !prev) } onMouseLeave={()=> setShowCard(prev=>!prev)}>
-    <div className={`w-[14em] h-[20em] bg-stone-800/30 rounded-xl  border-red-300/10 hover:shadow-xl  text-center leading-12 text-stone-200 pt-3`} >
+    <div className=' hover:scale-110' onMouseEnter={() => setShowCard(prev => !prev) } onMouseLeave={()=> setShowCard(prev=>!prev)}>
+    <div className={`w-[14em] realtive h-[20em] bg-stone-800/30 rounded-xl  border-red-300/10 hover:shadow-xl  text-center leading-12 text-stone-200 pt-3`} >
             <img src = {albumData.albumImg} alt = "A little light in the dark" className='h-32 w-32 rounded-sm object-cover translate-x-12 box-border my-8'></img>
             <h3>{albumData.albumName}</h3>
             <p>{"2024"}</p>
@@ -27,35 +27,27 @@ const Albums = ({albumData}) => {
 export default Albums
 
 
-function AlbumSongs ({show, albumData}) {
+function AlbumSongs ({ albumData}) {
 
   const [songDet, setSongDet] = useState()
 
 useEffect(()=>{
  async function getSongsfromApi(){
       const song = await getAlbumSongs(albumData._id)
-     console.log(song.songs);
-     
        setSongDet(song.songs)
   }
 
   getSongsfromApi()
 },[])
  
-    console.log("data",songDet);
-
-
-  
-
- 
   
   return (
     
-    <>
     
-    {<div className='w-full bg-linear-to-t from-stone-900 to-gray-500 h-full absolute top-0 left-0 border text-center rounded-2xl text-stone-200 ' > 
-            <h1 className='mb-2'>Songs</h1>
-            <div className='self-center border'>
+    
+    <div className='w-[14rem] h-full bg-linear-to-t from-slate-600  to-slate-300  absolute top-0  flex flex-col text-center justify-center rounded-2xl text-stone-200 ' > 
+            <h1 className='mb-2 text-xl font-bold text-zinc-800'>All Songs</h1>
+            <div className='w-full'>
             {
            songDet&&  songDet.map((song, index) => (
                 <div key={index}>
@@ -68,8 +60,7 @@ useEffect(()=>{
           </div>
             
           
-       </div>}
+       </div>
 
-    </>  
   )
 }

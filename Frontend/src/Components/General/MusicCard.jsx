@@ -19,9 +19,7 @@ const MusicCard = () => {
       const fetchlatest = async()=>{
           const detail = await getLatestSong()
           setLatestSongDetails(detail)
-         
-       
-          
+              
       }
       fetchlatest()
   },[])

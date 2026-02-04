@@ -1,10 +1,10 @@
 import axios from "axios";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { SongContext } from "../Admin_Context/Context";
-import { setIsPlaying } from "../../../Store/Slice/SongSlice";
 
-const NewSongCard = ({ songData, isPlaying, onClick }) => {
+const NewSongCard = ({ songData, isPlaying, onClick , setDelSong}) => {
   const [play, setPlay] = useState(false);
+ 
   const { currentSong, setCurrentSong } = useContext(SongContext);
   const audioRef = useRef(null);
 
@@ -73,12 +73,15 @@ audio.play()
   }
 
   async function deleteMedia(audio) {
+   setDelSong(prev => !prev)
+  
+   
     try {
-      const res = await axios.delete(
+      await axios.delete(
         `${serverUrl}/admin/delete_song/${audio._id}`,
         { withCredentials: true },
       );
-      console.log("deleted song ", res);
+     
     } catch (err) {
       console.log("error in deleting song ", err);
     }
@@ -190,7 +193,7 @@ audio.play()
               viewBox="0 0 24 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
-              onClick={() => deleteMedia(songData)}
+              onClick={() => {deleteMedia(songData) ; setDelSong(prev=>!prev)}}
               className="hover:cursor-pointer"
             >
               <circle

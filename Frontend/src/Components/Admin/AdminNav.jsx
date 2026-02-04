@@ -10,7 +10,7 @@ const navigate = useNavigate()
   useEffect(()=>{
       function handleSyncLogout(e){
         if(e.key==="logout" && e.newValue)
-         navigate('/')
+         navigate('/login')
 
       
       }
@@ -34,7 +34,7 @@ const navigate = useNavigate()
       if(res.status === 200){
         console.log(res.data.message);
         
-       navigate('/')
+       navigate('/login')
       }
     }
     catch(err){

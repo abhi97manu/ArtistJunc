@@ -14,11 +14,6 @@ const { ObjectId } = require("mongoose");
 
 router.use(cookieParser());
 
-router.get("/admin", (req, res) => {
-  res.send({
-    message: "hey admin",
-  });
-});
 
 router.post(
   "/upload_song",

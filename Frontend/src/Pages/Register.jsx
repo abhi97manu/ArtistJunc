@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 const Register = () => {
   const navigate = useNavigate();
   const [error, seterror] = useState();
+  const [showHint, setShowHint] = useState();
 
   const {
     register,
@@ -49,6 +50,7 @@ const Register = () => {
         <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight ">
           Sign in to your account
         </h2>
+        
       </div>
 
       <div className="mt-10 sm:mx-auto sm:w-full text-stone-600 sm:max-w-sm">
@@ -91,14 +93,7 @@ const Register = () => {
               <label for="password" className="block text-sm/6 font-medium ">
                 Password
               </label>
-              <div className="text-sm">
-                <a
-                  href="#"
-                  className="font-semibold text-indigo-400 hover:text-indigo-300"
-                >
-                  Forgot password?
-                </a>
-              </div>
+              
             </div>
             <div className="mt-2">
               <input
@@ -122,6 +117,10 @@ const Register = () => {
           </div>
 
           <div>
+            <div className="m-3  text-red-400">
+              <button className="hover:pointer " onClick= {()=>setShowHint(prev => !prev) }>Hint : </button>
+              {showHint && <span> abhi@gmail.com , abhi@1234</span>} 
+            </div>
             <button
               type="submit"
               className="flex w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm/6 font-semibold text-white hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"

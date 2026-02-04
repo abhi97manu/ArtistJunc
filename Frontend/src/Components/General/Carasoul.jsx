@@ -28,9 +28,9 @@ const Carasoul = () => {
       };
     
   return (
-    <div className=" h-[28rem] flex flex-col w-full p-2   justify-center relative">
+    <div className=" h-[28rem] flex flex-col w-full p-2  bg-linear-to-b from-slate-100 to-slate-300 justify-center relative">
          
-         <h1 className='text-5xl font-bold  px-6 m-3 text-transparent bg-linear-to-r from-stone-100 to-stone-900 bg-clip-text'> All Hits</h1>
+         <h1 className='text-5xl w-54 font-bold px-6 m-3 text-transparent bg-linear-to-r from-stone-200 to-stone-800 bg-clip-text'> All Hits</h1>
          
         <div className="flex h-full w-full   overflow-x-hidden">
           

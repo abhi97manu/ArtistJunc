@@ -87,18 +87,12 @@ const AlbumCarasoul = ({ itemCount = 1, albums }) => {
   });
 
   return (
-    <div className="w-full h-64 overflow-hidden bg-white" ref={containerRef}>
+    <div className="w-full h-64 overflow-hidden " ref={containerRef}>
       {  
       ( Object.keys(allAlbums).length !== 0) ? Array.from({ length: totalPages }).map(
         (_, index) =>
        ( index === currentPage && (
-            <div key = {index} className={` grid grid-cols-3 md:grid-cols-4 gap-4 transition-all duration-300 ease-in-out ${
-              index === currentPage
-                ? "opacity-100 scale-100 translate-y-0"
-                : index < currentPage
-                ? "opacity-0 scale-95 -translate-y-12"
-                : "opacity-0 scale-95 translate-y-12"
-            } w-full h-full`} >
+            <div key = {index} className={` grid grid-cols-3 md:grid-cols-4 gap-4 w-full h-full`} >
             
             
               {Object.entries(allAlbums).map(([key, value]) => {

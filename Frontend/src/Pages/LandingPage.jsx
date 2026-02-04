@@ -3,13 +3,12 @@ import MusicCard from "../Components/General/MusicCard";
 import TourGuide from "../Components/General/TourGuide";
 import Albums from "../Components/General/Albums";
 import Media from "../Components/General/Media";
-import axios from "axios";
-import Navbar from "../Components/General/Navbar";
-import { useDispatch, useSelector } from "react-redux";
-import {getAlbums} from "../ApiData";
 
-//import { play, pause, setSong, togglePlay,setCurrentPage } from "../Store/Slice/SongSlice";
-//import SongList from "../Components/General/SongList";
+import Navbar from "../Components/General/Navbar";
+
+import {getAlbums} from "../ApiData";
+import Loader from "../Components/Admin/Admin_components/Loader";
+
 
 
 const Carosoul = lazy(()=>import("../Components/General/Carasoul"))
@@ -44,7 +43,7 @@ const LandingPage = () => {
         </div>
         <div className="  items-center flex relative">
         
-        <Suspense fallback={<div>Loading.......</div>}>
+        <Suspense fallback={<Loader/>}>
           <Carosoul/>
         </Suspense>
 
@@ -54,12 +53,12 @@ const LandingPage = () => {
         <div className="relative h-full flex justify-center">
           <img
             src="bg-Mount.jpg"
-            className="h-screen w-full lg:object-fit object-cover blur-sm"
+            className="h-fit w-full lg:object-fit object-cover blur-sm"
           />
-          <h2 className="absolute  text-5xl font-bold mt-58 text-transparent bg-linear-to-r from-stone-200 to-stone-800 bg-clip-text">
+          <h2 className="absolute text-5xl font-bold mt-42 text-transparent bg-linear-to-r from-stone-200 to-stone-800 bg-clip-text">
             DISCOGRAPHY
           </h2>
-          <div className="absolute top-[40%] z-1 w-full  flex justify-center gap-7 p-4">
+          <div className="absolute top-[40%] z-1 w-full h-fit  flex justify-center gap-7 p-4">
             {discogrph &&
               Object.entries(discogrph).map(([i, album]) => {
                 return <Albums key={i} albumData={album} />;
