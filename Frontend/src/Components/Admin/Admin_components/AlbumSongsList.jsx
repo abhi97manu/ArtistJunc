@@ -6,7 +6,7 @@ const AlbumSongsList = ({ songData, albumData, toggleCard }) => {
 
   console.log("song", songData, " albumData", albumData.albumImg);
   const {isPlaying,setIsPlaying} = useContext(SongContext)
-console.log("useEffect",isPlaying);
+
     
   useEffect(()=>{
     

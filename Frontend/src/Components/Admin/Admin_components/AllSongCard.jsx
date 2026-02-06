@@ -6,7 +6,7 @@ import SongForm from "./SongForm";
 import AlbumForm from "./AlbumForm";
 import { SongContext } from "../Admin_Context/Context";
 const NewSongCard = lazy(() => import("./NewSongCard"));
-import { getTotalAlbums } from "../../../userApiData";
+import { getTotalAlbums, getUserSongs } from "../../../userApiData";
 import AlbumCarasoul from "./AlbumCarasoul";
 
 const loader = <h1>Loading..</h1>;
@@ -28,17 +28,23 @@ const AllSongCard = ({ label, value }) => {
       setTotalAlbum(res);
     };
  
-    axios
-      .get(`${serverUrl}/admin/userSongs`, { withCredentials: true })
-      .then((response) => {
+    // axios
+    //   .get(`${serverUrl}/admin/userSongs`, { withCredentials: true })
+    //   .then((response) => {
       
-        setAllSongs(response.data);
-      })
-      .catch((error) => {
-        console.log("error : ", error);
-      });
+    //     setAllSongs(response.data);
+    //   })
+    //   .catch((error) => {
+    //     console.log("error : ", error);
+    //   });
 
-    
+     const getUserSong = async()=>{
+    const {data} = await getUserSongs()
+
+    setAllSongs(data)
+    }
+
+    getUserSong()
          total();
 
   }, [addNew, addAlbum,delSong]);

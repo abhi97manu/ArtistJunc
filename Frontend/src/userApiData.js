@@ -20,9 +20,26 @@ export async function getTotalAlbums(){
         const resp = await axios.get(`${Server_URL}/admin/albums/totalablums`,{withCredentials:true});
         console.log(resp.data.totalAlbums);
         
-        return resp.data.totalAlbums;
+        return  resp.data.totalAlbums;
     }
     catch(err){
         console.log(err);}
 }
+
+export async function getUserSongs(){
+    try {
+      const resp = await   axios.get(`${Server_URL}/admin/userSongs`, { withCredentials: true })
+     
+      console.log("data", resp.data.length);
+      
+      return {data : resp.data , totalLength : resp.data.length}
+      
+
+    }
+    catch(err)
+    {
+ console.log("error : ", err);
+    }
+}
+
 

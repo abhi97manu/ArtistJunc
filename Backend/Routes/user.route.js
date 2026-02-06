@@ -75,6 +75,8 @@ userRouter.get("/userSongs", async (req, res) => {
   const data = await userModal
     .findById({ _id: jwt.verify(token, process.env.JWT_SECRET_KEY).id })
     .populate("songs");
+
+    
   res.json(data.songs);
 });
 
