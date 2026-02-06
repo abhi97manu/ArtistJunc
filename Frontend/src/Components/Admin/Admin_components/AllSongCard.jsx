@@ -1,7 +1,7 @@
 import React, { lazy, Suspense, useContext, useEffect, useState } from "react";
 import BlankCard from "./BlankCard";
 import axios from "axios";
-import AlbumCard from "./AlbumCard";
+
 import SongForm from "./SongForm";
 import AlbumForm from "./AlbumForm";
 import { SongContext } from "../Admin_Context/Context";
@@ -38,10 +38,14 @@ const AllSongCard = ({ label, value }) => {
         console.log("error : ", error);
       });
 
-
+    
          total();
 
-  }, [addNew, addAlbum]);
+  }, [addNew, addAlbum,delSong]);
+
+  const onDelBtn = ()=>{
+     setDelSong(prev=>!prev)
+  }
 
   return (
     <div className=" w-full mt-7 p-2 rounded-lg shadow-2xl bg-white">
@@ -56,7 +60,7 @@ const AllSongCard = ({ label, value }) => {
             <Suspense fallback={loader}>
             
               {allSongs &&
-                allSongs.map((ele, i) => (
+                allSongs.map((ele) => (
                   <NewSongCard
                     key={ele._id}
                     songData={ele}
@@ -64,7 +68,8 @@ const AllSongCard = ({ label, value }) => {
                     onClick={() => {
                       setIsPlaying(ele._id);
                     }}
-                    setDelSong={setDelSong}
+                    setDelSong={onDelBtn}
+                   
                   />
                 ))}
             </Suspense>

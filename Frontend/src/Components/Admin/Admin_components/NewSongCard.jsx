@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { SongContext } from "../Admin_Context/Context";
 
-const NewSongCard = ({ songData, isPlaying, onClick , setDelSong}) => {
+const NewSongCard = ({ songData, isPlaying, onClick , setDelSong, isalbum}) => {
   const [play, setPlay] = useState(false);
  
   const { currentSong, setCurrentSong } = useContext(SongContext);
@@ -73,8 +73,7 @@ audio.play()
   }
 
   async function deleteMedia(audio) {
-   setDelSong(prev => !prev)
-  
+   setDelSong()
    
     try {
       await axios.delete(
@@ -187,13 +186,13 @@ audio.play()
               </svg>
             )}
 
-            <svg
+           { !isalbum && <svg
               width="30px"
               height="30px"
               viewBox="0 0 24 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
-              onClick={() => {deleteMedia(songData) ; setDelSong(prev=>!prev)}}
+              onClick={() => {deleteMedia(songData) ;}}
               className="hover:cursor-pointer"
             >
               <circle
@@ -211,12 +210,13 @@ audio.play()
                 stroke-linejoin="round"
               />
             </svg>
+}
           </div>
         </div>
       </div>
       {isPlaying && (
         <div className="w-full justify-center items-center gap-4 px-3 bg-sky-400 rounded-lg flex h-6 ">
-          {<audio ref={audioRef}></audio>}
+          {<audio ref={audioRef}  ></audio>}
           <p className="text-[12px] w-8">{timeFormat(metadata?.currentTime)}</p>
           <input
             type="range"

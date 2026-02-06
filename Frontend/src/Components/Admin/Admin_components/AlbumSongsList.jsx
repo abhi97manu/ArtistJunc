@@ -31,7 +31,7 @@ const AlbumSongsList = ({ songData, albumData, toggleCard }) => {
                     onClick={() => {
                       setIsPlaying(value._id);
                     }}
-                  
+                   isalbum="true"
                     //setAddNew={setAddNew}
                     />
             );

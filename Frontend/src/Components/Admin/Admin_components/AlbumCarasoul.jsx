@@ -96,7 +96,7 @@ const AlbumCarasoul = ({ itemCount = 1, albums }) => {
             
             
               {Object.entries(allAlbums).map(([key, value]) => {
-                return <AlbumCard key={key} name={key} data={value} />;
+                return <AlbumCard key={key} name={key} data={value}  />;
               })}
             </div>
           ))
