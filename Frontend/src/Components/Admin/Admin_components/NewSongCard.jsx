@@ -2,49 +2,48 @@ import axios from "axios";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { SongContext } from "../Admin_Context/Context";
 
-const NewSongCard = ({ songData, isPlaying, onClick , setDelSong, isalbum}) => {
+const NewSongCard = ({ songData, isPlaying, onClick, setDelSong, isalbum }) => {
   const [play, setPlay] = useState(false);
- 
+
   const { currentSong, setCurrentSong } = useContext(SongContext);
   const audioRef = useRef(null);
 
   const serverUrl = import.meta.env.VITE_SERVER_URL;
- // console.log("isPlaying idf ", isPlaying);
+  // console.log("isPlaying idf ", isPlaying);
   const [metadata, setMetaData] = useState({
     duration: 0,
     currentTime: 0,
     volume: 0,
   });
 
-    //console.log("current Song",currentSong);
-    
+  //console.log("current Song",currentSong);
+
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
 
     audio.src = currentSong;
     audio.load();
-audio.play()
+    audio.play();
     audio.addEventListener("loadedmetadata", () => {
       setMetaData({
         duration: audio.duration,
         volume: audio.volume,
       });
     });
-
+   console.log("inside album song list ",currentSong);
     // audio.play();
 
-    return () =>{
+    return () => {
       audio.removeEventListener("loadedmetadata", () => {
         setMetaData({
-          duration: audio.duration,
+          duration: 0,
 
-          volume: audio.volume,
+          volume: 0,
         });
       });
-    
-    }
-  }, [currentSong]);
+    };
+  }, [currentSong,isPlaying]);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -59,12 +58,10 @@ audio.play()
       });
   }, [metadata]);
 
- 
   function togglePlay() {
     const audio = audioRef.current;
     if (!audio) return;
- 
-    
+
     play ? audio.pause() : audio.play();
 
     // setCurrentSong("")
@@ -73,14 +70,12 @@ audio.play()
   }
 
   async function deleteMedia(audio) {
-   setDelSong()
-   
+    setDelSong();
+
     try {
-      await axios.delete(
-        `${serverUrl}/admin/delete_song/${audio._id}`,
-        { withCredentials: true },
-      );
-     
+      await axios.delete(`${serverUrl}/admin/delete_song/${audio._id}`, {
+        withCredentials: true,
+      });
     } catch (err) {
       console.log("error in deleting song ", err);
     }
@@ -126,7 +121,6 @@ audio.play()
                   onClick();
                   setPlay(true);
                   togglePlay();
-                 
                 }}
                 className="hover:cursor-pointer"
               >
@@ -186,37 +180,40 @@ audio.play()
               </svg>
             )}
 
-           { !isalbum && <svg
-              width="30px"
-              height="30px"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              onClick={() => {deleteMedia(songData) ;}}
-              className="hover:cursor-pointer"
-            >
-              <circle
-                cx="12"
-                cy="12"
-                r="11"
-                stroke="#E53935"
-                stroke-width="1"
-              />
-              <path
-                d="M9 8H15M10 8V7C10 6.45 10.45 6 11 6H13C13.55 6 14 6.45 14 7V8M8 8L9 17C9 17.55 9.45 18 10 18H14C14.55 18 15 17.55 15 17L16 8"
-                stroke="#E53935"
-                stroke-width="1.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
-}
+            {!isalbum && (
+              <svg
+                width="30px"
+                height="30px"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                onClick={() => {
+                  deleteMedia(songData);
+                }}
+                className="hover:cursor-pointer"
+              >
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="11"
+                  stroke="#E53935"
+                  stroke-width="1"
+                />
+                <path
+                  d="M9 8H15M10 8V7C10 6.45 10.45 6 11 6H13C13.55 6 14 6.45 14 7V8M8 8L9 17C9 17.55 9.45 18 10 18H14C14.55 18 15 17.55 15 17L16 8"
+                  stroke="#E53935"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            )}
           </div>
         </div>
       </div>
       {isPlaying && (
         <div className="w-full justify-center items-center gap-4 px-3 bg-sky-400 rounded-lg flex h-6 ">
-          {<audio ref={audioRef}  ></audio>}
+          {<audio ref={audioRef}></audio>}
           <p className="text-[12px] w-8">{timeFormat(metadata?.currentTime)}</p>
           <input
             type="range"

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import NewSongCard from './NewSongCard'
 import { SongContext } from '../Admin_Context/Context';
 
@@ -6,6 +6,12 @@ const AlbumSongsList = ({ songData, albumData, toggleCard }) => {
 
   console.log("song", songData, " albumData", albumData.albumImg);
   const {isPlaying,setIsPlaying} = useContext(SongContext)
+console.log("useEffect",isPlaying);
+    
+  useEffect(()=>{
+    
+    return  setIsPlaying(null)
+  },[])
   return (
     <div
       className="w-full h-full bg-stone-800/60 absolute top-0 left-0 items-center text-center flex justify-center "
@@ -22,7 +28,7 @@ const AlbumSongsList = ({ songData, albumData, toggleCard }) => {
           </div>
 
           {songData.map((value, key) => {
-            console.log("inside album ", value, value._id);
+         
             
             return (
               <NewSongCard  key={value._id}
