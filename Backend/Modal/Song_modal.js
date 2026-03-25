@@ -7,7 +7,8 @@ const songSchema = new mongoose.Schema({
     Feat : String,
     AlbumName: String,
     AudioFile : String,
-    ImageFile : String
+    ImageFile : String,
+    Artist_id : {type: mongoose.Schema.Types.ObjectId, ref: 'users', required : true}
 },{timestamps:true})
 
 const songModal = mongoose.model("songs",songSchema)

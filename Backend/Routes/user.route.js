@@ -54,17 +54,22 @@ userRouter.delete("/delete_song/:id", async (req, res) => {
   if (!token) {
     return res.status(401).json({ message: "Unauthorized" });
   }
-  const song = req.params.id;
-  const deltedSong = await userModal.findOneAndUpdate(
-    { _id: jwt.verify(token, process.env.JWT_SECRET_KEY).id },
-    {
-      $pull: { songs: song },
-    },
-  );
+ 
+  try{
+     const song = req.params.id;
+     const deltedSong = await songModal.deleteOne({
+      _id : song
+     })
   if (!deltedSong) {
     return res.status(404).json({ message: "Song not found" });
   }
   res.json({ message: "Song deleted successfully" });
+  }
+  catch(err)
+  {
+    res.status(500).send({message : "Internal Error"})
+  }
+ 
 });
 
 userRouter.get("/userSongs", async (req, res) => {
@@ -72,12 +77,19 @@ userRouter.get("/userSongs", async (req, res) => {
   if (!token) {
     return res.status(401).json({ message: "Unauthorized" });
   }
-  const data = await userModal
+  try{
+    const data = await userModal
     .findById({ _id: jwt.verify(token, process.env.JWT_SECRET_KEY).id })
     .populate("songs");
 
     
   res.json(data.songs);
+  }
+  catch(err)
+  {
+    res.status(500).send({message : "Error while recieving Songs"})
+  }
+  
 });
 
 userRouter.get("/albums/totalablums", async (req, res) => {
@@ -105,7 +117,8 @@ userRouter.get("/albums", async (req, res) => {
   //console.log(typeof decoded.id);
   const limit = parseInt(req.query.limit) || 4;
   const offset = parseInt(req.query.offset) || 0;
-  const content = await albumModal.aggregate([
+  try{
+const content = await albumModal.aggregate([
     {
       $match: { artist_id: new mongoose.Types.ObjectId(decoded.id) },
     },
@@ -117,6 +130,11 @@ userRouter.get("/albums", async (req, res) => {
         as: "songs",
       },
     },
+   {
+   $match : {
+    songs : {$ne : []}
+   }
+   },
     {
       $skip: offset,
     },
@@ -137,10 +155,17 @@ userRouter.get("/albums", async (req, res) => {
       },
     },
   ]);
+  res.status(200).send(content);
+  }
+  catch(err)
+  {
+    res.status(500).send({message: "Internal Error"})
+  }
+  
 
   //console.log(content);
 
-  res.status(200).send(content);
+  
 });
 
 userRouter.post("/albums", upload.single("AlbumImg"), async (req, res) => {

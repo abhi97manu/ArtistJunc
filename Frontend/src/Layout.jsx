@@ -1,7 +1,3 @@
-import React from 'react'
-
-
-
 
 import Router from './Routes/Router.jsx'
 import { Outlet, RouterProvider } from 'react-router-dom'

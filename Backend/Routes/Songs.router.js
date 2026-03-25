@@ -20,7 +20,8 @@ router.post(
   storage.fields([{ name: "ImgCover" }, { name: "SongFile" }]),
   async (req, res) => {
     const { token } = req.cookies;
-    const imageFileData = await uploadImageToI_KIT(
+    try {
+       const imageFileData = await uploadImageToI_KIT(
       req.files.ImgCover[0].buffer
     );
     const songFileData = await uploadSongToI_KIT(req.files.SongFile);
@@ -34,6 +35,7 @@ router.post(
       Feat: req.body.Feat,
       AudioFile: songFileData.url,
       ImageFile: imageFileData.url,
+      Artist_id  : jwt.verify(token ,process.env.JWT_SECRET_KEY).id 
     });
 
     const user = await userModal.findOneAndUpdate(
@@ -52,6 +54,10 @@ router.post(
       data: songs,
       user: user,
     });
+    } catch (error) {
+        res.status(200).send({message : "Internal Error while uploading"})
+    }
+   
   }
 );
 

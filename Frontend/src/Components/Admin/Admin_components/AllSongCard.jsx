@@ -28,15 +28,7 @@ const AllSongCard = ({ label, value }) => {
       setTotalAlbum(res);
     };
  
-    // axios
-    //   .get(`${serverUrl}/admin/userSongs`, { withCredentials: true })
-    //   .then((response) => {
-      
-    //     setAllSongs(response.data);
-    //   })
-    //   .catch((error) => {
-    //     console.log("error : ", error);
-    //   });
+   
 
      const getUserSong = async()=>{
     const {data} = await getUserSongs()
@@ -50,7 +42,7 @@ const AllSongCard = ({ label, value }) => {
   }, [addNew, addAlbum,delSong]);
 
   const onDelBtn = ()=>{
-     setDelSong(prev=>!prev)
+    // setDelSong(prev=>!prev)
   }
 
   return (

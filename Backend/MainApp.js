@@ -15,6 +15,10 @@ app.use(cors({
    credentials: true,
 }));
 app.use(express.json())
+app.post('/api',(req, res) => {
+  console.log(req.body);
+  res.send("ok");
+});
 app.use('/',router)
 app.use('/albums',albumRouter)
 app.use('/admin',userRouter)
