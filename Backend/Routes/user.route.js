@@ -13,18 +13,23 @@ const upload = multer({ storage: multer.memoryStorage() });
 userRouter.post("/login", async (req, res) => {
   {
     const { email, password } = req.body;
-    const user = await userModal.findOne({ email: email });
-
-    if (user) {
-      const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET_KEY);
-      res.cookie("token", token, {
-        httpOnly: true,
-      });
-      password === user.password
-        ? res.status(200).json({ message: "Login Sucessfull" })
-        : res.status(401).json({ message: "Invalid Credentials" });
-    } else {
-      res.status(404).json({ message: "User not found" });
+    try {
+      console.log("email : ", email, "password : ", password);
+      const user = await userModal.findOne({ email: email });
+      console.log("user : ", user);
+      if (user) {
+        const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET_KEY);
+        res.cookie("token", token, {
+          httpOnly: true,
+        });
+        password === user.password
+          ? res.status(200).json({ message: "Login Sucessfull" })
+          : res.status(401).json({ message: "Invalid Credentials" });
+      } else {
+        res.status(404).json({ message: "User not found" });
+      }
+    } catch (err) {
+      res.status(500).json({ message: "Internal Error" });
     }
   }
 });
@@ -54,22 +59,19 @@ userRouter.delete("/delete_song/:id", async (req, res) => {
   if (!token) {
     return res.status(401).json({ message: "Unauthorized" });
   }
- 
-  try{
-     const song = req.params.id;
-     const deltedSong = await songModal.deleteOne({
-      _id : song
-     })
-  if (!deltedSong) {
-    return res.status(404).json({ message: "Song not found" });
+
+  try {
+    const song = req.params.id;
+    const deltedSong = await songModal.deleteOne({
+      _id: song,
+    });
+    if (!deltedSong) {
+      return res.status(404).json({ message: "Song not found" });
+    }
+    res.json({ message: "Song deleted successfully" });
+  } catch (err) {
+    res.status(500).send({ message: "Internal Error" });
   }
-  res.json({ message: "Song deleted successfully" });
-  }
-  catch(err)
-  {
-    res.status(500).send({message : "Internal Error"})
-  }
- 
 });
 
 userRouter.get("/userSongs", async (req, res) => {
@@ -77,19 +79,15 @@ userRouter.get("/userSongs", async (req, res) => {
   if (!token) {
     return res.status(401).json({ message: "Unauthorized" });
   }
-  try{
+  try {
     const data = await userModal
-    .findById({ _id: jwt.verify(token, process.env.JWT_SECRET_KEY).id })
-    .populate("songs");
+      .findById({ _id: jwt.verify(token, process.env.JWT_SECRET_KEY).id })
+      .populate("songs");
 
-    
-  res.json(data.songs);
+    res.json(data.songs);
+  } catch (err) {
+    res.status(500).send({ message: "Error while recieving Songs" });
   }
-  catch(err)
-  {
-    res.status(500).send({message : "Error while recieving Songs"})
-  }
-  
 });
 
 userRouter.get("/albums/totalablums", async (req, res) => {
@@ -103,11 +101,10 @@ userRouter.get("/albums/totalablums", async (req, res) => {
   const totalAlbums = await albumModal.countDocuments({
     artist_id: decoded.id,
   });
-//console.log(totalAlbums);
+  //console.log(totalAlbums);
 
   res.status(200).json({ totalAlbums });
-
-})
+});
 userRouter.get("/albums", async (req, res) => {
   const { token } = req.cookies;
   if (!token) {
@@ -117,60 +114,55 @@ userRouter.get("/albums", async (req, res) => {
   //console.log(typeof decoded.id);
   const limit = parseInt(req.query.limit) || 4;
   const offset = parseInt(req.query.offset) || 0;
-  try{
-const content = await albumModal.aggregate([
-    {
-      $match: { artist_id: new mongoose.Types.ObjectId(decoded.id) },
-    },
-    {
-      $lookup: {
-        from: "songs",
-        localField: "Songs",
-        foreignField: "_id",
-        as: "songs",
+  try {
+    const content = await albumModal.aggregate([
+      {
+        $match: { artist_id: new mongoose.Types.ObjectId(decoded.id) },
       },
-    },
-   {
-   $match : {
-    songs : {$ne : []}
-   }
-   },
-    {
-      $skip: offset,
-    },
-    {
-      $limit: limit,
-    },
-    {
-      $project: {
-        albumName: 1,
-        albumImg: 1,
-        createdAt: 1,
-        songs: {
-          _id: 1,
-          Title: 1,
-          AudioFile: 1,
-          ImageFile: 1,
+      {
+        $lookup: {
+          from: "songs",
+          localField: "Songs",
+          foreignField: "_id",
+          as: "songs",
         },
       },
-    },
-  ]);
-  res.status(200).send(content);
+      {
+        $match: {
+          songs: { $ne: [] },
+        },
+      },
+      {
+        $skip: offset,
+      },
+      {
+        $limit: limit,
+      },
+      {
+        $project: {
+          albumName: 1,
+          albumImg: 1,
+          createdAt: 1,
+          songs: {
+            _id: 1,
+            Title: 1,
+            AudioFile: 1,
+            ImageFile: 1,
+          },
+        },
+      },
+    ]);
+    res.status(200).send(content);
+  } catch (err) {
+    res.status(500).send({ message: "Internal Error" });
   }
-  catch(err)
-  {
-    res.status(500).send({message: "Internal Error"})
-  }
-  
 
   //console.log(content);
-
-  
 });
 
 userRouter.post("/albums", upload.single("AlbumImg"), async (req, res) => {
- // console.log(req.body);
- // console.log(req.file);
+  // console.log(req.body);
+  // console.log(req.file);
   const token = req.cookies.token;
   if (!token) {
     res.json({ message: "not Authorized" });
@@ -180,7 +172,7 @@ userRouter.post("/albums", upload.single("AlbumImg"), async (req, res) => {
 
   try {
     const AlbumImage = await uploadImageToI_KIT(req.file.buffer);
-   // console.log(req.body.AlbumSongs);
+    // console.log(req.body.AlbumSongs);
 
     const album = await albumModal.create({
       artist_id: decoded.id,
@@ -191,7 +183,7 @@ userRouter.post("/albums", upload.single("AlbumImg"), async (req, res) => {
 
     if (!album) {
       res.status(401).json({ message: "something went wrong with Album DB" });
-    //  console.log("something went wrong with Album DB");
+      //  console.log("something went wrong with Album DB");
     }
     res.status(200).json({ mesage: "sucess" });
   } catch (err) {
