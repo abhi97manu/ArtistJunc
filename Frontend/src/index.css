@@ -4,7 +4,6 @@
 @import "tailwindcss";
 
 
-
 .SongTitle{
     font-family: "Wix Madefor Display", sans-serif; 
     font-size: xx-large;
@@ -27,7 +26,7 @@
 .slider{
    
    width: 100%;
-   height: 2px;
+   height: 2px;cd 
    appearance: none;
    background: #166440;
    opacity: 0.65;

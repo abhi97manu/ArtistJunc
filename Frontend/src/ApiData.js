@@ -6,6 +6,7 @@ import { setCurrentSong } from "./Store/Slice/SongSlice";
 
 
 const Server_URL = import.meta.env.VITE_SERVER_URL;
+
 const type = "Single";
 
 
@@ -16,7 +17,7 @@ export function useUsersAllSongs() {
   useEffect(() => {
     const getSongsData = async () => {
       try {
-        const data = await axios.get(`${Server_URL}/getAllSongs/${type}?limit=5&page=${currPage}`);
+        const data = await axios.get(`${Server_URL}getAllSongs/${type}?limit=5&page=${currPage}`);
         setAllSongs(data.data.Songs);
         setTotalRecords(data.data.count)
 
@@ -43,7 +44,7 @@ export  function useGetSong() {
   console.log("getClickedSong",songId);
   
     try {
-      const data = await axios.get(`${Server_URL}/getSong/${songId}`);
+      const data = await axios.get(`${Server_URL}getSong/${songId}`);
 
       const retreived_song_details = data.data.data;
       
@@ -63,7 +64,8 @@ export  function useGetSong() {
   export async function getLatestSong(){
     try{
 
-      const response = await axios.get(`${Server_URL}/getRecentSong`)
+      const response = await axios.get(`${Server_URL}getRecentSong`)
+      console.log("server url : ", response);
       if(!response)
         console.log("no data");
       return response.data
@@ -81,7 +83,7 @@ export  function useGetSong() {
 
   export async function getAlbums(){
     try{
-        const response = await axios.get(`${Server_URL}/albums/allAlbums`)
+        const response = await axios.get(`${Server_URL}albums/allAlbums`)
             console.log(response);
             return response.data
     }
@@ -93,7 +95,7 @@ export  function useGetSong() {
 
   export async function getAlbumSongs(id){
     try{
-      const resp = await axios.get(`${Server_URL}/albums/albumSong?search=${id}`)
+      const resp = await axios.get(`${Server_URL}albums/albumSong?search=${id}`)
        console.log(resp.data);
             return resp.data
     }
