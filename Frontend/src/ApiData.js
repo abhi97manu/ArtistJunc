@@ -6,7 +6,7 @@ import { setCurrentSong } from "./Store/Slice/SongSlice";
 
 
 const Server_URL = import.meta.env.VITE_SERVER_URL;
-
+console.log("server url : ", Server_URL);
 const type = "Single";
 
 
@@ -63,8 +63,8 @@ export  function useGetSong() {
 
   export async function getLatestSong(){
     try{
-
-      const response = await axios.get(`${Server_URL}getRecentSong`)
+console.log ("getting latest song");
+      const response = await axios.get(`${Server_URL}/getRecentSong`)
       console.log("server url : ", response);
       if(!response)
         console.log("no data");

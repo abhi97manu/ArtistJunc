@@ -27,7 +27,7 @@ const LandingPage = () => {
   useEffect(() => {
     async function getAlbumDetails(){
          const data =await getAlbums()
-      console.log(data);
+      
       setDiscograph(data)
       
     } 
