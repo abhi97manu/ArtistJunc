@@ -21,6 +21,8 @@ userRouter.post("/login", async (req, res) => {
         const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET_KEY);
         res.cookie("token", token, {
           httpOnly: true,
+          sameSite: "none",
+          secure: true,
         });
         password === user.password
           ? res.status(200).json({ message: "Login Sucessfull" })
