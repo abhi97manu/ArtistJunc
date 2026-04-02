@@ -12,6 +12,7 @@ const albumRouter = require('./Routes/album.route')
 
 app.use(cors({
   origin: 'https://creatr-abhi97manu-abhisheks-projects-64c62193.vercel.app',
+  credentials: true,
 }));
 app.use(express.json())
 app.post('/api',(req, res) => {
