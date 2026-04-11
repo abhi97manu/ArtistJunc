@@ -10,7 +10,7 @@ import { getTotalAlbums, getUserSongs } from "../../../userApiData";
 import AlbumCarasoul from "./AlbumCarasoul";
 
 const loader = <h1>Loading..</h1>;
-const serverUrl = import.meta.env.VITE_SERVER_URL;
+
 
 const AllSongCard = ({ label, value }) => {
   const { isPlaying, setIsPlaying } = useContext(SongContext);

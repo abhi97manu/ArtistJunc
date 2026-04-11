@@ -11,7 +11,7 @@ const ManageTours = () => {
   useEffect(() => {
     console.log("changed ", showForm);
     axios
-      .get(`${ServerUrl}/admin/tour/getTours`, { withCredentials: true })
+      .get(`${ServerUrl}admin/tour/getTours`, { withCredentials: true })
       .then((res) => {
         console.log(res.data);
         setShowTours(res.data);

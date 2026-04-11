@@ -34,7 +34,7 @@ const AlbumForm = ({ songs, setAddAlbum }) => {
 
     setLoading(true);
     try {
-      const resp = await axios.post(`${serverUrl}/admin/albums`, formData, {
+      const resp = await axios.post(`${serverUrl}admin/albums`, formData, {
         withCredentials: true,
       });
 

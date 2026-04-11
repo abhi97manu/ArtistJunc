@@ -39,7 +39,7 @@ const SongForm = ({ setAddNew }) => {
       }
 
       setLoading(true);
-      await axios.post(`${serverUrl}/upload_song`, formdata, {
+      await axios.post(`${serverUrl}upload_song`, formdata, {
         withCredentials: true,
       });
     } catch (error) {

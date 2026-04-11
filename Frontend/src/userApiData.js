@@ -18,7 +18,7 @@ export async function getAlbums(limit, offset){
 export async function getTotalAlbums(){
     try{
         const resp = await axios.get(`${Server_URL}admin/albums/totalablums`,{withCredentials:true});
-        console.log(resp.data.totalAlbums);
+        console.log( "total album",  resp.data.totalAlbums);
         
         return  resp.data.totalAlbums;
     }

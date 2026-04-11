@@ -10,29 +10,82 @@ const { uploadImageToI_KIT } = require("../Services/Song.services");
 
 const upload = multer({ storage: multer.memoryStorage() });
 
-userRouter.post("/login", async (req, res) => {
-  {
-    const { email, password } = req.body;
-    try {
-      console.log("email : ", email, "password : ", password);
-      const user = await userModal.findOne({ email: email });
-      console.log("user : ", user);
-      if (user) {
-        const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET_KEY);
-        res.cookie("token", token, {
-          httpOnly: true,
-          sameSite: "none",
-          secure: true,
-        });
-        password === user.password
-          ? res.status(200).json({ message: "Login Sucessfull" })
-          : res.status(401).json({ message: "Invalid Credentials" });
-      } else {
-        res.status(404).json({ message: "User not found" });
-      }
-    } catch (err) {
-      res.status(500).json({ message: "Internal Error" });
+const authCookieOptions = {
+  httpOnly: true,
+  sameSite: "none",
+  secure: true,
+};
+
+userRouter.post("/register", async (req, res) => {
+  const { artistName, stageName, genre, bio, email, password } = req.body;
+
+  if (!artistName || !email || !password) {
+    return res
+      .status(400)
+      .json({ message: "Artist name, email and password are required" });
+  }
+
+  try {
+    const existingUser = await userModal.findOne({ email });
+
+    if (existingUser) {
+      return res
+        .status(409)
+        .json({ message: "Artist already exists with this email" });
     }
+
+    const user = await userModal.create({
+      artistName,
+      stageName,
+      genre,
+      bio,
+      email,
+      password,
+    });
+
+    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET_KEY);
+    res.cookie("token", token, authCookieOptions);
+
+    return res.status(201).json({
+      message: "Artist registered successfully",
+      user: {
+        id: user.id,
+        artistName: user.artistName,
+        email: user.email,
+      },
+    });
+  } catch (err) {
+    return res.status(500).json({ message: "Internal Error" });
+  }
+});
+
+userRouter.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const user = await userModal.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (password !== user.password) {
+      return res.status(401).json({ message: "Invalid Credentials" });
+    }
+
+    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET_KEY);
+    res.cookie("token", token, authCookieOptions);
+
+    return res.status(200).json({
+      message: "Login Sucessfull",
+      user: {
+        id: user.id,
+        artistName: user.artistName,
+        email: user.email,
+      },
+    });
+  } catch (err) {
+    return res.status(500).json({ message: "Internal Error" });
   }
 });
 
@@ -43,16 +96,23 @@ userRouter.get("/profile", async (req, res) => {
     return res.status(401).json({ message: "Unauthorized" });
   }
 
-  const decoded_token = jwt.verify(token, process.env.JWT_SECRET_KEY);
-  const user = await userModal.findById(decoded_token.id);
+  const decodedToken = jwt.verify(token, process.env.JWT_SECRET_KEY);
+  const user = await userModal.findById(decodedToken.id);
+
   if (!user) {
     return res.status(404).json({ message: "User not found" });
   }
-  res.json({ email: user.email });
+
+  return res.json({
+    email: user.email,
+    artistName: user.artistName,
+    stageName: user.stageName,
+    genre: user.genre,
+  });
 });
 
 userRouter.post("/logout", (req, res) => {
-  res.clearCookie("token", { httpOnly: true });
+  res.clearCookie("token", authCookieOptions);
   res.json({ message: "Logged out successfully" });
 });
 
@@ -103,17 +163,16 @@ userRouter.get("/albums/totalablums", async (req, res) => {
   const totalAlbums = await albumModal.countDocuments({
     artist_id: decoded.id,
   });
-  //console.log(totalAlbums);
 
   res.status(200).json({ totalAlbums });
 });
+
 userRouter.get("/albums", async (req, res) => {
   const { token } = req.cookies;
   if (!token) {
-    res.json({ message: "User not Auth!" });
+    return res.json({ message: "User not Auth!" });
   }
   const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
-  //console.log(typeof decoded.id);
   const limit = parseInt(req.query.limit) || 4;
   const offset = parseInt(req.query.offset) || 0;
   try {
@@ -158,13 +217,9 @@ userRouter.get("/albums", async (req, res) => {
   } catch (err) {
     res.status(500).send({ message: "Internal Error" });
   }
-
-  //console.log(content);
 });
 
 userRouter.post("/albums", upload.single("AlbumImg"), async (req, res) => {
-  // console.log(req.body);
-  // console.log(req.file);
   const token = req.cookies.token;
   if (!token) {
     res.json({ message: "not Authorized" });
@@ -174,7 +229,6 @@ userRouter.post("/albums", upload.single("AlbumImg"), async (req, res) => {
 
   try {
     const AlbumImage = await uploadImageToI_KIT(req.file.buffer);
-    // console.log(req.body.AlbumSongs);
 
     const album = await albumModal.create({
       artist_id: decoded.id,
@@ -185,7 +239,6 @@ userRouter.post("/albums", upload.single("AlbumImg"), async (req, res) => {
 
     if (!album) {
       res.status(401).json({ message: "something went wrong with Album DB" });
-      //  console.log("something went wrong with Album DB");
     }
     res.status(200).json({ mesage: "sucess" });
   } catch (err) {

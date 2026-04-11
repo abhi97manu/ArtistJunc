@@ -19,13 +19,18 @@ const Dashboard = () => {
   useEffect(() => {
     async function getUSer() {
       try {
-        await axios.get(`${import.meta.env.VITE_SERVER_URL}/admin/profile`, {
-          withCredentials: true,
-        });
+        const user = await axios.get(
+          `${import.meta.env.VITE_SERVER_URL}admin/profile`,
+          {
+            withCredentials: true,
+          },
+        );
+
+        if (!user) {
+          navigate("/login");
+        }
       } catch (err) {
         console.log(err);
-
-        navigate("/login");
       }
     }
     getUSer();

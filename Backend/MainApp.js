@@ -15,6 +15,7 @@ app.use(cors({
   credentials: true,
 }));
 app.use(express.json())
+app.use(cookieParser())
 app.post('/api',(req, res) => {
   console.log(req.body);
   res.send("ok");
@@ -24,7 +25,6 @@ app.use('/albums',albumRouter)
 app.use('/admin',userRouter)
 app.use('/admin/tour',tourRouter)
 app.use('/admin/album',albumRouter)
-app.use(cookieParser())
 
 
 

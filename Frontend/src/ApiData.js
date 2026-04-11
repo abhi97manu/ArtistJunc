@@ -64,7 +64,7 @@ export  function useGetSong() {
   export async function getLatestSong(){
     try{
 console.log ("getting latest song");
-      const response = await axios.get(`${Server_URL}/getRecentSong`)
+      const response = await axios.get(`${Server_URL}getRecentSong`)
       console.log("server url : ", response);
       if(!response)
         console.log("no data");

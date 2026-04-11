@@ -1,11 +1,36 @@
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
-    email:String,
-    password:String,
-    songs : [{ type: mongoose.Schema.Types.ObjectId, ref: 'songs' }],
-    tours : [{type: mongoose.Schema.Types.ObjectId, ref: 'tours' }]
-})
+  artistName: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  stageName: {
+    type: String,
+    trim: true,
+  },
+  genre: [{
+    type: String,
+    trim: true,
+  }],
+  bio: {
+    type: String,
+    trim: true,
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    trim: true,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+  songs: [{ type: mongoose.Schema.Types.ObjectId, ref: "songs" }],
+  tours: [{ type: mongoose.Schema.Types.ObjectId, ref: "tours" }],
+});
 
-const userModal = mongoose.model("users",userSchema);
+const userModal = mongoose.model("users", userSchema);
 module.exports = userModal;
