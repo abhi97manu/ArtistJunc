@@ -10,8 +10,10 @@ const albumRouter = require('./Routes/album.route')
 
 
 
+const allowedOrigins = [process.env.ORIGIN, 'http://localhost:5173'].filter(Boolean);
+console.log("Allowed Origins:", allowedOrigins);
 app.use(cors({
-  origin: process.env.ORIGIN,
+  origin: allowedOrigins,
   credentials: true,
 }));
 app.use(express.json())

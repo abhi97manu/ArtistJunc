@@ -16,7 +16,7 @@ const Register = () => {
     reset,
     formState: { errors },
   } = useForm();
-
+  console.log(import.meta.env.VITE_SERVER_URL);
   const passwordValue = watch("password");
 
   async function onSubmit(data) {

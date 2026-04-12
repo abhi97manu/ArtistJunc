@@ -1,20 +1,13 @@
 import React, { useEffect, useState } from "react";
 import AdminNav from "../Components/Admin/AdminNav";
-import AdminSide from "../Components/Admin/AdminSide";
 
 import axios from "axios";
-import {
-  Navigate,
-  Outlet,
-  RouterProvider,
-  useNavigate,
-} from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import SongProvider from "../Components/Admin/Admin_Context/Context.jsx";
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const recent_ck = cookieStore.get("token");
-  console.log("cookie ", recent_ck);
+  const [artist, setArtist] = useState(null);
 
   useEffect(() => {
     async function getUSer() {
@@ -26,23 +19,26 @@ const Dashboard = () => {
           },
         );
 
-        if (!user) {
+        if (!user?.data) {
           navigate("/login");
+          return;
         }
+
+        setArtist(user.data);
       } catch (err) {
         console.log(err);
+        navigate("/login");
       }
     }
     getUSer();
-  }, []);
+  }, [navigate]);
 
   return (
     <>
-      <div className=" w-full h-full relative  ">
-        <AdminNav />
-        <div className="flex w-full h-full relative bg-zinc-200 ">
+      <div className="w-full h-full relative">
+        <AdminNav artist={artist} />
+        <div className="flex w-full h-full relative bg-zinc-200">
           <SongProvider>
-            <AdminSide />
             <Outlet />
           </SongProvider>
         </div>

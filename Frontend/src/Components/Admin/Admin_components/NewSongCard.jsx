@@ -89,140 +89,116 @@ const NewSongCard = ({ songData, isPlaying, onClick, setDelSong, isalbum }) => {
   }
 
   return (
-    <div className="border-b-1 p-2 flex flex-col gap-2">
-      <div className=" h-12  flex box-border px-2 ">
-        <img src={songData.ImageFile} className="  w-12 "></img>
-        <div className="grid grid-cols-3 items-center text-center justify-center px-2 w-full">
-          <div className="col-span-2 leading-4 items-center px-6 ">
-            <div className="flex gap-2 items-center">
-              <h1 className="text-md font-bold">{songData.Title}</h1>
-              <span className="h-1 w-1 rounded-full bg-black"></span>
-              <h1 className="text-sm font-medium underline">{songData.Feat}</h1>
+    <div className="flex flex-col gap-3 rounded-[24px] border border-violet-100 bg-white p-3 shadow-[0_10px_24px_rgba(83,61,117,0.08)] transition hover:border-violet-200 hover:shadow-[0_16px_30px_rgba(83,61,117,0.12)] sm:p-4">
+      <div className="flex items-start gap-3 sm:gap-4">
+        <img
+          src={songData.ImageFile}
+          className="h-14 w-14 rounded-2xl object-cover sm:h-16 sm:w-16"
+          alt={songData.Title}
+        ></img>
+        <div className="flex min-w-0 flex-1 flex-row gap-3  items-center justify-between">
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-2">
+              <h1 className="truncate text-base font-bold text-slate-900 sm:text-lg">
+                {songData.Title}
+              </h1>
+              {songData.Feat && (
+                <>
+                  <span className="h-1.5 w-1.5 rounded-full bg-violet-300"></span>
+                  <h1 className="truncate text-sm font-medium text-violet-700">
+                    {songData.Feat}
+                  </h1>
+                </>
+              )}
             </div>
 
-            <h1 className="text-sm font-light italic place-self-start">
-              {songData.Type}
-            </h1>
+            <div className="mt-2 flex flex-wrap items-center gap-2">
+              <span className="rounded-full bg-violet-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-violet-600">
+                {songData.Type || "Single"}
+              </span>
+            </div>
           </div>
-          <div className="col-span-1 place-self-end mb-2 flex  gap-2">
+          <div className="flex items-center gap-2 self-end sm:self-center">
             {!isPlaying || !play ? (
-              <svg
-                fill="rgb(6, 40, 194)"
-                height="30px"
-                width="30px"
-                version="1.1"
-                id="Layer_1"
-                xmlns="http://www.w3.org/2000/svg"
-                xmlns:xlink="http://www.w3.org/1999/xlink"
-                viewBox="0 0 492.308 492.308"
-                xml:space="preserve"
+              <button
+                type="button"
                 onClick={() => {
                   setCurrentSong(songData.AudioFile);
                   onClick();
                   setPlay(true);
                   togglePlay();
                 }}
-                className="hover:cursor-pointer"
+                className="group inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-[linear-gradient(135deg,#8b5cf6_0%,#6d28d9_100%)] text-white shadow-[0_12px_24px_rgba(109,40,217,0.28)] transition duration-200 hover:-translate-y-0.5 hover:brightness-105"
               >
-                <g>
-                  <g>
-                    <path d="M139.346,118.995v254.313l261.74-127.154L139.346,118.995z M159.038,150.457l196.99,95.697l-196.99,95.692V150.457z" />
-                  </g>
-                </g>
-                <g>
-                  <g>
-                    <path
-                      d="M246.154,0C110.423,0,0,110.423,0,246.154s110.423,246.154,246.154,246.154s246.154-110.423,246.154-246.154
-                  S381.885,0,246.154,0z M246.154,472.615c-124.875,0-226.462-101.591-226.462-226.462S121.279,19.692,246.154,19.692
-                  s226.462,101.591,226.462,226.462S371.029,472.615,246.154,472.615z"
-                    />
-                  </g>
-                </g>
-              </svg>
+                <svg
+                  viewBox="0 0 24 24"
+                  className="h-5 w-5 translate-x-[1px] fill-current transition group-hover:scale-105"
+                  aria-hidden="true"
+                >
+                  <path d="M8 6.5v11l9-5.5-9-5.5z" />
+                </svg>
+              </button>
             ) : (
-              <svg
-                fill="rgb(6, 40, 194)"
-                height="30px"
-                width="30px"
-                version="1.1"
-                id="Layer_1"
-                xmlns="http://www.w3.org/2000/svg"
-                xmlns:xlink="http://www.w3.org/1999/xlink"
-                viewBox="0 0 492.308 492.308"
-                xml:space="preserve"
+              <button
+                type="button"
                 onClick={() => {
-                  //  onClick();
                   setPlay(false);
                   togglePlay();
                 }}
-                className="hover:cursor-pointer"
+                className="group inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-violet-100 text-violet-700 shadow-[inset_0_0_0_1px_rgba(139,92,246,0.18)] transition duration-200 hover:-translate-y-0.5 hover:bg-violet-200"
               >
-                {/* Pause bars */}
-                <g>
-                  <g>
-                    <path d="M176.923,138.462h49.231v215.385h-49.231V138.462z" />
-                    <path d="M266.154,138.462h49.231v215.385h-49.231V138.462z" />
-                  </g>
-                </g>
-
-                {/* Outer circle */}
-                <g>
-                  <g>
-                    <path
-                      d="M246.154,0C110.423,0,0,110.423,0,246.154s110.423,246.154,246.154,246.154
-        s246.154-110.423,246.154-246.154S381.885,0,246.154,0z
-        M246.154,472.615c-124.875,0-226.462-101.591-226.462-226.462
-        S121.279,19.692,246.154,19.692s226.462,101.591,226.462,226.462
-        S371.029,472.615,246.154,472.615z"
-                    />
-                  </g>
-                </g>
-              </svg>
+                <svg
+                  viewBox="0 0 24 24"
+                  className="h-5 w-5 fill-current transition group-hover:scale-105"
+                  aria-hidden="true"
+                >
+                  <path d="M8 6h3v12H8zm5 0h3v12h-3z" />
+                </svg>
+              </button>
             )}
 
             {!isalbum && (
-              <svg
-                width="30px"
-                height="30px"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
+              <button
+                type="button"
                 onClick={() => {
                   deleteMedia(songData);
                 }}
-                className="hover:cursor-pointer"
+                className="group inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-rose-50 text-rose-500 shadow-[inset_0_0_0_1px_rgba(244,63,94,0.15)] transition duration-200 hover:-translate-y-0.5 hover:bg-rose-100"
               >
-                <circle
-                  cx="12"
-                  cy="12"
-                  r="11"
-                  stroke="#E53935"
-                  stroke-width="1"
-                />
-                <path
-                  d="M9 8H15M10 8V7C10 6.45 10.45 6 11 6H13C13.55 6 14 6.45 14 7V8M8 8L9 17C9 17.55 9.45 18 10 18H14C14.55 18 15 17.55 15 17L16 8"
-                  stroke="#E53935"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
+                <svg
+                  viewBox="0 0 24 24"
+                  className="h-5 w-5 stroke-current transition group-hover:scale-105"
+                  fill="none"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M9 8h6" />
+                  <path d="M10 8V7a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v1" />
+                  <path d="M8 8l1 9a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1l1-9" />
+                </svg>
+              </button>
             )}
           </div>
         </div>
       </div>
       {isPlaying && (
-        <div className="w-full justify-center items-center gap-4 px-3 bg-sky-400 rounded-lg flex h-6 ">
+        <div className="flex h-10 w-full items-center gap-3 rounded-2xl bg-[linear-gradient(90deg,rgba(243,237,247,1)_0%,rgba(237,233,254,1)_100%)] px-3">
           {<audio ref={audioRef}></audio>}
-          <p className="text-[12px] w-8">{timeFormat(metadata?.currentTime)}</p>
+          <p className="w-9 text-[12px] font-medium text-slate-600">
+            {timeFormat(metadata?.currentTime)}
+          </p>
           <input
             type="range"
-            className="w-full slider"
+            className="slider w-full accent-violet-600"
             min="0.0"
             max={Math.floor(metadata?.duration)}
             value={metadata?.currentTime}
           ></input>
-          <p className="text-[12px]">{timeFormat(metadata?.duration)}</p>
+          <p className="text-[12px] font-medium text-slate-600">
+            {timeFormat(metadata?.duration)}
+          </p>
         </div>
       )}
     </div>
