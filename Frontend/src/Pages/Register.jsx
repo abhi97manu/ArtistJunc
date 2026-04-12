@@ -41,6 +41,7 @@ const Register = () => {
               password: data.password,
             };
 
+            console.log("Payload being sent to server:", payload);
       const result = await axios.post(
         `${import.meta.env.VITE_SERVER_URL}${endpoint}`,
         payload,

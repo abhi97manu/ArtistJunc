@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 const songModal = require("../Modal/Song_modal");
 const albumModal = require("../Modal/Album_modal");
 const multer = require("multer");
+const bcrypt = require("bcrypt");
 const { uploadImageToI_KIT } = require("../Services/Song.services");
 
 const upload = multer({ storage: multer.memoryStorage() });
@@ -34,15 +35,16 @@ userRouter.post("/register", async (req, res) => {
         .json({ message: "Artist already exists with this email" });
     }
 
+ 
     const user = await userModal.create({
-      artistName,
-      stageName,
+      artistName : artistName.toUpperCase(),
+      stageName : stageName.toUpperCase(),
       genre,
       bio,
       email,
-      password,
+      password : await bcrypt.hash(password, 10),
     });
-
+     
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET_KEY);
     res.cookie("token", token, authCookieOptions);
 
@@ -69,7 +71,7 @@ userRouter.post("/login", async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    if (password !== user.password) {
+    if (await bcrypt.compare(password, user.password) !== true) {
       return res.status(401).json({ message: "Invalid Credentials" });
     }
 
