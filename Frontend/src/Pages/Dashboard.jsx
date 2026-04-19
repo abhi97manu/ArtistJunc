@@ -34,16 +34,18 @@ const Dashboard = () => {
   }, [navigate]);
 
   return (
-    <>
-      <div className="w-full h-full relative">
+    <div className="relative min-h-screen w-full bg-[#f3edf7]">
+      <div className="mx-auto flex min-h-screen w-full flex-col">
         <AdminNav artist={artist} />
-        <div className="flex w-full h-full relative bg-zinc-200">
+        <div className="flex flex-1 justify-center bg-[linear-gradient(180deg,#f3edf7_0%,#ede9fe_100%)] px-3 pb-6 sm:px-5 lg:px-8">
           <SongProvider>
-            <Outlet />
+            <div className="w-full max-w-6xl">
+              <Outlet />
+            </div>
           </SongProvider>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -1,6 +1,5 @@
 import React, { lazy, Suspense, useContext, useEffect, useState } from "react";
 import BlankCard from "./BlankCard";
-import axios from "axios";
 
 import SongForm from "./SongForm";
 import AlbumForm from "./AlbumForm";
@@ -16,7 +15,6 @@ const AllSongCard = ({ label, value }) => {
   const { isPlaying, setIsPlaying } = useContext(SongContext);
 
   const [allSongs, setAllSongs] = useState();
-  const [allAlbums, setAllAlbums] = useState({});
   const [delSong, setDelSong] = useState(false);
   const [totalAlbum, setTotalAlbum] = useState(0);
   const [addNew, setAddNew] = useState();
@@ -112,7 +110,7 @@ const AllSongCard = ({ label, value }) => {
             <BlankCard setAddNew={setAddAlbum} value={`${value} `} />
           </div>
 
-          <AlbumCarasoul itemCount={totalAlbum} albums={allAlbums} />
+          <AlbumCarasoul itemCount={totalAlbum} />
         </>
       )}
       {addNew && <SongForm setAddNew={setAddNew} />}

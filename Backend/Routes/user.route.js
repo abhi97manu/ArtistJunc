@@ -3,7 +3,6 @@ const mongoose = require("mongoose");
 const userRouter = express.Router();
 const userModal = require("../Modal/user_modal");
 const jwt = require("jsonwebtoken");
-const songModal = require("../Modal/Song_modal");
 const albumModal = require("../Modal/Album_modal");
 const multer = require("multer");
 const bcrypt = require("bcrypt");
@@ -116,42 +115,6 @@ userRouter.get("/profile", async (req, res) => {
 userRouter.post("/logout", (req, res) => {
   res.clearCookie("token", authCookieOptions);
   res.json({ message: "Logged out successfully" });
-});
-
-userRouter.delete("/delete_song/:id", async (req, res) => {
-  const { token } = req.cookies;
-  if (!token) {
-    return res.status(401).json({ message: "Unauthorized" });
-  }
-
-  try {
-    const song = req.params.id;
-    const deltedSong = await songModal.deleteOne({
-      _id: song,
-    });
-    if (!deltedSong) {
-      return res.status(404).json({ message: "Song not found" });
-    }
-    res.json({ message: "Song deleted successfully" });
-  } catch (err) {
-    res.status(500).send({ message: "Internal Error" });
-  }
-});
-
-userRouter.get("/userSongs", async (req, res) => {
-  const { token } = req.cookies;
-  if (!token) {
-    return res.status(401).json({ message: "Unauthorized" });
-  }
-  try {
-    const data = await userModal
-      .findById({ _id: jwt.verify(token, process.env.JWT_SECRET_KEY).id })
-      .populate("songs");
-
-    res.json(data.songs);
-  } catch (err) {
-    res.status(500).send({ message: "Error while recieving Songs" });
-  }
 });
 
 userRouter.get("/albums/totalablums", async (req, res) => {

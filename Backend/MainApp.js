@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 const userRouter = require('./Routes/user.route');
 const tourRouter = require('./Routes/tours.route');
 const albumRouter = require('./Routes/album.route')
+const artistRouter = require('./Routes/artist.route')
 
 
 
@@ -24,6 +25,7 @@ app.post('/api',(req, res) => {
 });
 app.use('/',router)
 app.use('/albums',albumRouter)
+app.use('/artists',artistRouter)
 app.use('/admin',userRouter)
 app.use('/admin/tour',tourRouter)
 app.use('/admin/album',albumRouter)

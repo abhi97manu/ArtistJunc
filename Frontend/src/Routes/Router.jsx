@@ -5,6 +5,7 @@ import Loader from "../Components/Admin/Admin_components/Loader";
 
 const Register = lazy(() => import("../Pages/Register"));
 const LandingPage = lazy(() => import("../Pages/LandingPage"));
+const ArtistPortfolio = lazy(() => import("../Pages/ArtistPortfolio"));
 const Dashboard = lazy(() => import("../Pages/Dashboard"));
 const ManageTours = lazy(() => import("../Components/Admin/ManageTours"));
 const AdminSec = lazy(() => import("../Components/Admin/AdminSec"));
@@ -53,6 +54,14 @@ const Router = createBrowserRouter([
       <Suspense fallback={<Loader />}>
         {" "}
         <LandingPage />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/artist/:artistId",
+    element: (
+      <Suspense fallback={<Loader />}>
+        <ArtistPortfolio />
       </Suspense>
     ),
   },

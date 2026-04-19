@@ -5,33 +5,36 @@ import { useDispatch } from "react-redux";
 import { setCurrentSong } from "./Store/Slice/SongSlice";
 
 
-const Server_URL = import.meta.env.VITE_SERVER_URL;
-console.log("server url : ", Server_URL);
-const type = "Single";
+const Server_URL = import.meta.env.VITE_SERVER_URL || "";
+const ApiBase = Server_URL.endsWith("/") ? Server_URL : `${Server_URL}/`;
+//const type = "Single";
 
 
-export function useUsersAllSongs() {
+export function useUsersAllSongs(artistId, limit = 5) {
   const currPage = useSelector((state)=>state.currentPlaying.currentPage)
   const [allSongs, setAllSongs] = useState([]);
-  const [totalRecords, setTotalRecords] = useState()
+  const [totalRecords, setTotalRecords] = useState(0)
+  const [isLoading, setIsLoading] = useState(false)
   useEffect(() => {
     const getSongsData = async () => {
+      if (!artistId) return;
+
+      setIsLoading(true);
       try {
-        const data = await axios.get(`${Server_URL}getAllSongs/${type}?limit=5&page=${currPage}`);
+        const data = await axios.get(`${ApiBase}getAllSongs/${artistId}?limit=${limit}&page=${currPage}&type=Single`);
         setAllSongs(data.data.Songs);
         setTotalRecords(data.data.count)
-
-      console.log(data.data.Songs, currPage);
         
       } catch (ERR) {
         console.log(ERR, "error");
-        
+      } finally {
+        setIsLoading(false);
       }
     };
   getSongsData()
-  },[currPage]);
+  },[artistId, currPage, limit]);
 
-  return {allSongs,totalRecords};
+  return {allSongs,totalRecords,isLoading};
 }
 
 
@@ -41,10 +44,8 @@ export  function useGetSong() {
   
 
  async function getClickedSong(songId){
-  console.log("getClickedSong",songId);
-  
     try {
-      const data = await axios.get(`${Server_URL}getSong/${songId}`);
+      const data = await axios.get(`${ApiBase}getSong/${songId}`);
 
       const retreived_song_details = data.data.data;
       
@@ -61,11 +62,10 @@ export  function useGetSong() {
 
 
 
-  export async function getLatestSong(){
+  export async function getLatestSong(artistId = ""){
     try{
-console.log ("getting latest song");
-      const response = await axios.get(`${Server_URL}getRecentSong`)
-      console.log("server url : ", response);
+      const query = artistId ? `?artistId=${artistId}` : "";
+      const response = await axios.get(`${ApiBase}getRecentSong${query}`)
       if(!response)
         console.log("no data");
       return response.data
@@ -80,11 +80,31 @@ console.log ("getting latest song");
 
   }
 
-
-  export async function getAlbums(){
+  export async function getArtists(){
     try{
-        const response = await axios.get(`${Server_URL}albums/allAlbums`)
-            console.log(response);
+        const response = await axios.get(`${ApiBase}artists`)
+            return response.data
+    }
+    catch(err){
+        console.log(err);
+    }
+  }
+
+  export async function getArtistById(artistId){
+    try{
+        const response = await axios.get(`${ApiBase}artists/${artistId}`)
+            return response.data
+    }
+    catch(err){
+        console.log(err);
+    }
+  }
+
+
+  export async function getAlbums(artistId, limit = 8, page = 0){
+    try{
+        const query = artistId ? `?artistId=${artistId}&limit=${limit}&page=${page}` : "";
+        const response = await axios.get(`${ApiBase}albums/allAlbums${query}`)
             return response.data
     }
     catch(err){
@@ -95,8 +115,7 @@ console.log ("getting latest song");
 
   export async function getAlbumSongs(id){
     try{
-      const resp = await axios.get(`${Server_URL}albums/albumSong?search=${id}`)
-       console.log(resp.data);
+      const resp = await axios.get(`${ApiBase}albums/albumSong?search=${id}`)
             return resp.data
     }
      catch(err){

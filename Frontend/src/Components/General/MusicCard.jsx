@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { togglePlay, setCurrentSong, setSong, setIsPlaying } from '../../Store/Slice/SongSlice'
+import { togglePlay, setCurrentSong, setSong } from '../../Store/Slice/SongSlice'
 import { getLatestSong } from '../../ApiData' 
 
-const MusicCard = () => {
+const MusicCard = ({ artistId }) => {
 
  
 
   const songId = useSelector((state)=> state.currentPlaying.songId)
   const isPlaying = useSelector((state)=> state.currentPlaying.isPlaying)
-  const currentPlaying = useSelector((state)=>state.currentPlaying.currentPlaying)
   const dispatch = useDispatch()
   const [latestSongDetails, setLatestSongDetails] = useState();
 
@@ -17,15 +16,18 @@ const MusicCard = () => {
 
    useEffect(()=>{
       const fetchlatest = async()=>{
-          const detail = await getLatestSong()
+          if (!artistId) return;
+
+          const detail = await getLatestSong(artistId)
           setLatestSongDetails(detail)
               
       }
       fetchlatest()
-  },[])
+  },[artistId])
   
   const Controller=()=>{
          
+       if (!latestSongDetails?._id) return;
         
        if(latestSongDetails?._id===songId)
          dispatch(togglePlay())
@@ -34,6 +36,10 @@ const MusicCard = () => {
         dispatch(setCurrentSong(latestSongDetails))
         
       
+  }
+
+  if (!latestSongDetails?._id) {
+    return null;
   }
 
   return (

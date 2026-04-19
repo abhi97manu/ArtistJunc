@@ -28,7 +28,6 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  songs: [{ type: mongoose.Schema.Types.ObjectId, ref: "songs" }],
   tours: [{ type: mongoose.Schema.Types.ObjectId, ref: "tours" }],
 });
 

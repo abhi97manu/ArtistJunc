@@ -5,7 +5,21 @@ const AlbumModal = require("../Modal/Album_modal");
 
 albumRouter.get("/allAlbums", async (req, res) => {
   try {
-    const data = await AlbumModal.find();
+    const { artistId, limit, page = 0 } = req.query;
+    const query = {};
+
+    if (artistId) {
+      query.artist_id = new mongoose.Types.ObjectId(artistId);
+    }
+
+    const pageLimit = Number(limit) || 0;
+    const request = AlbumModal.find(query).sort({ createdAt: -1 });
+
+    if (pageLimit > 0) {
+      request.skip(Number(page) * pageLimit).limit(pageLimit);
+    }
+
+    const data = await request;
 
     if (!data) {
       console.log("no data in db");
@@ -48,8 +62,6 @@ albumRouter.get("/albumSong", async (req, res) => {
         }
       }
     ]);
-console.log(data);
-
     res.status(200).json(data[0]??null)
   } catch (err) {
     console.log(err);

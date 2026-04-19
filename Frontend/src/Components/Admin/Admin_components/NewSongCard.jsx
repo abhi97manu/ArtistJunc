@@ -8,7 +8,8 @@ const NewSongCard = ({ songData, isPlaying, onClick, setDelSong, isalbum }) => {
   const { currentSong, setCurrentSong } = useContext(SongContext);
   const audioRef = useRef(null);
 
-  const serverUrl = import.meta.env.VITE_SERVER_URL;
+  const serverUrl = import.meta.env.VITE_SERVER_URL || "";
+  const apiBase = serverUrl.endsWith("/") ? serverUrl : `${serverUrl}/`;
   // console.log("isPlaying idf ", isPlaying);
   const [metadata, setMetaData] = useState({
     duration: 0,
@@ -70,12 +71,11 @@ const NewSongCard = ({ songData, isPlaying, onClick, setDelSong, isalbum }) => {
   }
 
   async function deleteMedia(audio) {
-    setDelSong();
-
     try {
-      await axios.delete(`${serverUrl}/admin/delete_song/${audio._id}`, {
+      await axios.delete(`${apiBase}songs/${audio._id}`, {
         withCredentials: true,
       });
+      setDelSong();
     } catch (err) {
       console.log("error in deleting song ", err);
     }
